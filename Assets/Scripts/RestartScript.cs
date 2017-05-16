@@ -11,7 +11,7 @@ public class RestartScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if(Input.GetKeyDown(KeyCode.Backspace))
+		if(Input.GetButton("Restart")||Input.GetKeyDown(KeyCode.Backspace))
 		{
 			//Debug.Log ("ReloadScene");
 			Application.LoadLevel (Application.loadedLevel);
