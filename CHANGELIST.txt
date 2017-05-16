@@ -14,3 +14,14 @@ Galactic Grapple
 -Added Pull/Push mechanic
 -Enhanced grappling physics
 -Added player movement
+
+#Date: May 2, 2017
+-Added new physics and forces to player
+
+-Enhanced grappling system
+
+-New Controls
+
+-New Map Design
+
+
