@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-class PlayerGadgetController : MonoBehaviour
+class PlayerGadgetController: MonoBehaviour
 {
 
 	#region grappleVars
