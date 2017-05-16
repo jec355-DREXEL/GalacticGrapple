@@ -1,7 +1,16 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+
 Galactic Grapple
-Date: May 16, 2017
 
-Updated level
-Coop support
-Controller Support
+#Date: May 16, 2017
+-Updated level
+-Added player vehicle
+-Co-op support
+-Controller Support
 
+#Date: May 9, 2017
+-Updated level
+-Added Pull/Push mechanic
+-Enhanced grappling physics
+-Added player movement
