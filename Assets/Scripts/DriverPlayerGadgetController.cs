@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-class PlayerGadgetController: MonoBehaviour
+class DriverPlayerGadgetController : MonoBehaviour
 {
 
 	#region grappleVars
@@ -85,7 +85,8 @@ class PlayerGadgetController: MonoBehaviour
 		} 
 		else 
 		{
-			
+			myRB.constraints = RigidbodyConstraints.None;
+			//myRB.freezeRotation = false;
 			Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 			if(input.x > 0) 
 			{
@@ -169,6 +170,8 @@ class PlayerGadgetController: MonoBehaviour
 	void MakeGrappleHook(Vector3 point) 
 	{
 		grappleOn = true;
+		myRB.constraints = RigidbodyConstraints.FreezeRotationX;
+		//myRB.freezeRotation = true;
 		myJoint.connectedAnchor = point;
 		jointLimit.limit = (this.transform.position - point).magnitude;
 		Debug.Log ((this.transform.position - point).magnitude);
