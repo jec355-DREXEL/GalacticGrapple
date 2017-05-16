@@ -23,6 +23,8 @@ class DriverPlayerGadgetController : MonoBehaviour
 
 	public float moveSpeed = 1.0f;
 	public float maxVelocity = 10.0f;
+
+	private float GroundDistance = 1.0f;
 	#endregion
 
 	private void Start() 
@@ -85,8 +87,8 @@ class DriverPlayerGadgetController : MonoBehaviour
 		} 
 		else 
 		{
-			myRB.constraints = RigidbodyConstraints.None;
-			//myRB.freezeRotation = false;
+			//myRB.constraints = RigidbodyConstraints.None;
+			myRB.freezeRotation = false;
 			Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 			if(input.x > 0) 
 			{
@@ -128,7 +130,18 @@ class DriverPlayerGadgetController : MonoBehaviour
 					}
 				}
 			}
-			//Debug.Log (myRB.velocity);
+
+			//Debug.Log (IsGrounded());
+
+			if (IsGrounded ()) {
+				if (Input.GetButtonDown ("BoostJump")) {
+					Debug.Log ("BoostJump");
+					myRB.AddForce (0, 600000.0f, 0);
+					myRB.freezeRotation = true;
+				}
+			} else {
+				myRB.freezeRotation = false;
+			}
 		}
 
 
@@ -170,13 +183,18 @@ class DriverPlayerGadgetController : MonoBehaviour
 	void MakeGrappleHook(Vector3 point) 
 	{
 		grappleOn = true;
-		myRB.constraints = RigidbodyConstraints.FreezeRotationX;
-		//myRB.freezeRotation = true;
+		//myRB.constraints = RigidbodyConstraints.FreezeRotationX;
+		myRB.freezeRotation = true;
 		myJoint.connectedAnchor = point;
 		jointLimit.limit = (this.transform.position - point).magnitude;
 		Debug.Log ((this.transform.position - point).magnitude);
 		myJoint.linearLimit = jointLimit;
 		myLR.enabled = true;
 		myLR.SetPosition(1, point);
+	}
+
+	bool IsGrounded()
+	{
+		return Physics.Raycast (transform.position, - Vector3.up, GroundDistance);
 	}
 }

@@ -137,6 +137,13 @@ namespace UnityStandardAssets.Vehicles.Car
                 m_WheelMeshes[i].transform.rotation = quat;
             }
 
+			/*
+			if(Input.GetButtonDown("BoostJump")) 
+			{
+				Debug.Log ("BoostJump");
+				m_Rigidbody.AddForce(0, 5000.0f, 0);
+			}*/
+
             //clamp input values
             steering = Mathf.Clamp(steering, -1, 1);
             AccelInput = accel = Mathf.Clamp(accel, 0, 1);
