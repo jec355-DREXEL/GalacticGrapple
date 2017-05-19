@@ -132,6 +132,7 @@ class PlayerController : MonoBehaviour {
 				jointLimit.limit = Mathf.Infinity;
 				myJoint.linearLimit = jointLimit;
 				myLR.enabled = false;
+				myRB.AddForce (0, 300.0f, 0);
 			}
 		}
 
@@ -189,6 +190,7 @@ class PlayerController : MonoBehaviour {
 				jointLimit.limit = Mathf.Infinity;
 				myJoint.linearLimit = jointLimit;
 				myLR.enabled = false;
+				myRB.AddForce (0, 300.0f, 0);
 			}
 		}
     }
