@@ -11,7 +11,7 @@ class PlayerController : MonoBehaviour {
     public float winchSpeed = 0.5f;
     public float winchMomentumGain = 100f;
     public float hitRadius = 1.25f;
-    private bool grappleOn = false;
+    public bool grappleOn = false;
     public LayerMask grappleMask;
     public LineRenderer myLR = null;
     private SoftJointLimit jointLimit = new SoftJointLimit();
@@ -24,7 +24,8 @@ class PlayerController : MonoBehaviour {
 
     public float moveSpeed = 1.0f;
     public float maxVelocity = 10.0f;
-    public Image crosshair;
+	public Image player1_crosshair;
+	public Image player2_crosshair;
     public float crosshairSpeed = 100f;
     Ray ray;
     #endregion
@@ -50,8 +51,8 @@ class PlayerController : MonoBehaviour {
         if (grappleOn) {
             myLR.SetPosition(0, myLR.transform.position);
             #region Winch Stuff
-            if (Input.GetAxisRaw("Pull/Push") > 0) {
-                Debug.Log("Pull");
+			if (Input.GetButtonDown("Pull_P1")) {
+                //Debug.Log("Pull");
                 jointLimit.limit -= winchSpeed * Time.deltaTime;
                 if (jointLimit.limit < .5) {
                     jointLimit.limit = 0.5f;
@@ -60,8 +61,8 @@ class PlayerController : MonoBehaviour {
                 Vector3 thingy = myJoint.connectedAnchor - this.transform.position;
                 thingy.Normalize();
                 myRB.AddForceAtPosition(thingy * winchMomentumGain * Time.deltaTime, thingy * (-this.transform.localScale.x / 5), ForceMode.Acceleration);
-            } else if (Input.GetAxisRaw("Pull/Push") < 0) {
-                Debug.Log("Push");
+			} else if (Input.GetButtonDown("Push_P1")) {
+                //Debug.Log("Push");
                 jointLimit.limit += winchSpeed * Time.deltaTime;
                 if (jointLimit.limit > maxGrappleDist) {
                     jointLimit.limit = maxGrappleDist;
@@ -76,63 +77,120 @@ class PlayerController : MonoBehaviour {
 				myRB.AddForce(transform.forward * 100);
 			}
 			*/
-        } else {
-            Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal_P1"), Input.GetAxisRaw("Vertical_P1"));
+        } 
 
-            Vector2 temp = crosshair.transform.position;
-            temp.x += input.x * crosshairSpeed * Time.deltaTime;
-            temp.y += input.y * crosshairSpeed * Time.deltaTime;
-            crosshair.transform.position = temp;
 
-			Ray ray = Camera.main.ScreenPointToRay (crosshair.GetComponent<RectTransform>().position);
-			Debug.DrawRay(ray.origin,ray.direction,Color.magenta);
+		//PLAYER 1 GRAPPLE
+		Vector2 player1_Input = new Vector2(Input.GetAxisRaw("Horizontal_P1"), Input.GetAxisRaw("Vertical_P1"));
 
-			if(Physics.Raycast(ray,out hit ,maxGrappleDist)) 
+		Vector2 temp = player1_crosshair.transform.position;
+		temp.x += player1_Input.x * crosshairSpeed * Time.deltaTime;
+		temp.y += player1_Input.y * crosshairSpeed * Time.deltaTime;
+		player1_crosshair.transform.position = temp;
+
+		Ray ray = Camera.main.ScreenPointToRay (player1_crosshair.GetComponent<RectTransform>().position);
+		Debug.DrawRay(ray.origin,ray.direction,Color.magenta);
+
+		if(Physics.Raycast(ray,out hit ,maxGrappleDist)) 
+		{
+			int layerTrash = 1 << hit.collider.gameObject.layer;
+			if ((layerTrash & grappleMask.value) != 0) 
 			{
-                int layerTrash = 1 << hit.collider.gameObject.layer;
-				if ((layerTrash & grappleMask.value) != 0) 
-				{
-					crosshair.GetComponent<Image> ().color = new Color (255, 0, 0);
-				}
-            }
-			else if (Physics.SphereCast(ray, hitRadius, out hit, maxGrappleDist)) {
-				//Debug.Log("You selected the " + hit.transform.name);
-				int layerTrash = 1 << hit.collider.gameObject.layer;
-				if ((layerTrash & grappleMask.value) != 0) 
-				{
-					crosshair.GetComponent<Image>().color = new Color(255, 0, 0);
-				}
+				player1_crosshair.GetComponent<Image> ().color = new Color (0, 255, 0);
 			}
-			else {
-				crosshair.GetComponent<Image> ().color = new Color (0, 0, 0);
+		}
+		else if (Physics.SphereCast(ray, hitRadius, out hit, maxGrappleDist)) {
+			//Debug.Log("You selected the " + hit.transform.name);
+			int layerTrash = 1 << hit.collider.gameObject.layer;
+			if ((layerTrash & grappleMask.value) != 0) 
+			{
+				player1_crosshair.GetComponent<Image>().color = new Color(0, 255, 0);
 			}
-        }
+		}
+		else {
+			player1_crosshair.GetComponent<Image> ().color = new Color (255, 0, 0);
+		}
 
 
-        #region Grappling Hook Stuff
-        if (Input.GetButtonDown("Fire1")) {
-            RaycastHit hit;
-			Ray ray = Camera.main.ScreenPointToRay (crosshair.GetComponent<RectTransform>().position);
-            if (!grappleOn) {
-                if (Physics.Raycast(ray, out hit, maxGrappleDist)) {
-                    int layerTrash = 1 << hit.collider.gameObject.layer;
-                    if ((layerTrash & grappleMask.value) != 0) {
-                        MakeGrappleHook(hit.point);
-                    }
-                } else if (Physics.SphereCast(ray, hitRadius, out hit, maxGrappleDist)) {
-                    int layerTrash = 1 << hit.collider.gameObject.layer;
-                    if ((layerTrash & grappleMask.value) != 0) {
-                        MakeGrappleHook(hit.point);
-                    }
-                }
-            } else {
-                grappleOn = false;
-                jointLimit.limit = Mathf.Infinity;
-                myJoint.linearLimit = jointLimit;
-                myLR.enabled = false;
-            }
-        }
-        #endregion
+		if (Input.GetButtonDown("Grapple_P1")) {
+			RaycastHit hit_P1;
+			Ray ray_P1 = Camera.main.ScreenPointToRay (player1_crosshair.GetComponent<RectTransform>().position);
+			if (!grappleOn) {
+				if (Physics.Raycast(ray_P1, out hit_P1, maxGrappleDist)) {
+					int layerTrash = 1 << hit_P1.collider.gameObject.layer;
+					if ((layerTrash & grappleMask.value) != 0) {
+						MakeGrappleHook(hit_P1.point);
+					}
+				} else if (Physics.SphereCast(ray_P1, hitRadius, out hit_P1, maxGrappleDist)) {
+					int layerTrash = 1 << hit_P1.collider.gameObject.layer;
+					if ((layerTrash & grappleMask.value) != 0) {
+						MakeGrappleHook(hit_P1.point);
+					}
+				}
+			} else {
+				grappleOn = false;
+				jointLimit.limit = Mathf.Infinity;
+				myJoint.linearLimit = jointLimit;
+				myLR.enabled = false;
+			}
+		}
+
+
+
+		//PLAYER 2 GRAPPLE
+		Vector2 player2_Input = new Vector2(Input.GetAxisRaw("Horizontal_P2"), Input.GetAxisRaw("Vertical_P2"));
+
+		Vector2 temp2 = player2_crosshair.transform.position;
+		temp2.x += player2_Input.x * crosshairSpeed * Time.deltaTime;
+		temp2.y += player2_Input.y * crosshairSpeed * Time.deltaTime;
+		player2_crosshair.transform.position = temp2;
+
+		Ray ray2 = Camera.main.ScreenPointToRay (player2_crosshair.GetComponent<RectTransform>().position);
+		Debug.DrawRay(ray2.origin,ray2.direction,Color.magenta);
+
+		if(Physics.Raycast(ray2,out hit ,maxGrappleDist)) 
+		{
+			int layerTrash = 1 << hit.collider.gameObject.layer;
+			if ((layerTrash & grappleMask.value) != 0) 
+			{
+				player2_crosshair.GetComponent<Image> ().color = new Color (0, 255, 0);
+			}
+		}
+		else if (Physics.SphereCast(ray2, hitRadius, out hit, maxGrappleDist)) {
+			//Debug.Log("You selected the " + hit.transform.name);
+			int layerTrash = 1 << hit.collider.gameObject.layer;
+			if ((layerTrash & grappleMask.value) != 0) 
+			{
+				player2_crosshair.GetComponent<Image>().color = new Color(0, 255, 0);
+			}
+		}
+		else {
+			player2_crosshair.GetComponent<Image> ().color = new Color (0, 0, 255);
+		}
+
+
+		if (Input.GetButtonDown("Grapple_P2")) {
+			RaycastHit hit_P2;
+			Ray ray_P2 = Camera.main.ScreenPointToRay (player2_crosshair.GetComponent<RectTransform>().position);
+			if (!grappleOn) {
+				if (Physics.Raycast(ray_P2, out hit_P2, maxGrappleDist)) {
+					int layerTrash = 1 << hit_P2.collider.gameObject.layer;
+					if ((layerTrash & grappleMask.value) != 0) {
+						MakeGrappleHook(hit_P2.point);
+					}
+				} else if (Physics.SphereCast(ray_P2, hitRadius, out hit_P2, maxGrappleDist)) {
+					int layerTrash = 1 << hit_P2.collider.gameObject.layer;
+					if ((layerTrash & grappleMask.value) != 0) {
+						MakeGrappleHook(hit_P2.point);
+					}
+				}
+			} else {
+				grappleOn = false;
+				jointLimit.limit = Mathf.Infinity;
+				myJoint.linearLimit = jointLimit;
+				myLR.enabled = false;
+			}
+		}
     }
 
     void MakeGrappleHook(Vector3 point) {

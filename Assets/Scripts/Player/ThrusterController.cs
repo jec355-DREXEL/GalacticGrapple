@@ -11,7 +11,7 @@ public class ThrusterController : MonoBehaviour
 	public bool playerGrappling = false;
 
 	private GameObject thePlayer;
-	private PlayerControllerMouse playerScript;
+	private PlayerController playerScript;
 
 	// Use this for initialization
 	void Start () 
@@ -19,7 +19,7 @@ public class ThrusterController : MonoBehaviour
 		myRB = this.GetComponent<Rigidbody>();
 
 		thePlayer = GameObject.Find("Player");
-		playerScript = thePlayer.GetComponent<PlayerControllerMouse>();
+		playerScript = thePlayer.GetComponent<PlayerController>();
 
 	}
 	
@@ -32,8 +32,8 @@ public class ThrusterController : MonoBehaviour
 		if (!playerGrappling) 
 		{
 		
-			if (Input.GetButtonDown ("Horizontal")) {
-				if (Input.GetAxis ("Horizontal") > 0) {
+			if (Input.GetButtonDown ("Horizontal_Thrusters")) {
+				if (Input.GetAxis ("Horizontal_Thrusters") > 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
 					myRB.AddForce (thrustForce, thrustForce, 0);
@@ -44,8 +44,8 @@ public class ThrusterController : MonoBehaviour
 				}
 			}
 
-			if (Input.GetButtonDown ("Vertical")) {
-				if (Input.GetAxis ("Vertical") > 0) {
+			if (Input.GetButtonDown ("Vertical_Thrusters")) {
+				if (Input.GetAxis ("Vertical_Thrusters") > 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
 					myRB.AddForce (0, thrustForce, thrustForce);
