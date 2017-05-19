@@ -29,8 +29,8 @@ public class ThrusterController : MonoBehaviour
 		playerGrappling = playerScript.grappleOn;
 		//Debug.Log (playerGrappling);
 
-		if (!playerGrappling) 
-		{
+		//if (!playerGrappling) 
+		//{
 		
 			if (Input.GetButtonDown ("Horizontal_Thrusters")) {
 				if (Input.GetAxis ("Horizontal_Thrusters") > 0) {
@@ -56,6 +56,6 @@ public class ThrusterController : MonoBehaviour
 				}
 			}
 		
-		}
+		//}
 	}
 }
