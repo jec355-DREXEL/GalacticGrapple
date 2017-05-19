@@ -78,69 +78,41 @@ class PlayerController : MonoBehaviour {
 			*/
         } else {
             Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            /*
-            if (input.x > 0) {
-                //myRB.AddForceAtPosition(myCamera.transform.right * moveSpeed * Time.deltaTime, (-myCamera.transform.right + this.transform.position) * sphereRadius, ForceMode.Acceleration);
-                if (myRB.velocity.magnitude < maxVelocity)
-                    myRB.AddForce(myCam.transform.right * moveSpeed);
-            }
-            if (input.x < 0) {
-                //myRB.AddForceAtPosition(-myCamera.transform.right * moveSpeed * Time.deltaTime, (-myCamera.transform.right + this.transform.position) * sphereRadius, ForceMode.Acceleration);
-                if (myRB.velocity.magnitude < maxVelocity)
-                    myRB.AddForce(-myCam.transform.right * moveSpeed);
-            }
-            if (input.y > 0) {
-                //myRB.AddForceAtPosition(myCamera.transform.forward * moveSpeed * Time.deltaTime, (-myCamera.transform.forward + this.transform.position) * sphereRadius, ForceMode.Acceleration);
-                if (myRB.velocity.magnitude < maxVelocity)
-                    myRB.AddForce(myCam.transform.forward * moveSpeed);
-            }
-            if (input.y < 0) {
-                //myRB.AddForceAtPosition(-myCamera.transform.forward * moveSpeed * Time.deltaTime, (myCamera.transform.forward + this.transform.position) * sphereRadius, ForceMode.Acceleration);
-                if (myRB.velocity.magnitude < maxVelocity)
-                    myRB.AddForce(-myCam.transform.forward * moveSpeed);
-            }
-            */
+
             Vector2 temp = crosshair.transform.position;
             temp.x += input.x * crosshairSpeed * Time.deltaTime;
             temp.y += input.y * crosshairSpeed * Time.deltaTime;
             crosshair.transform.position = temp;
-            ray = new Ray();
-            ray.origin = myCam.transform.position;
-            float crosshairY = crosshair.rectTransform.position.y+269;
-            float angle = Mathf.Abs(Mathf.Atan(crosshairY/maxGrappleDist));
-            Debug.Log(Mathf.Cos(angle));
-            ray.direction = new Vector3(0f, Mathf.Sin(angle), Mathf.Cos(angle));
-            Debug.DrawRay(ray.origin,ray.direction,Color.magenta);
-            if(Physics.Raycast(ray,out hit ,maxGrappleDist)) {
+
+			Ray ray = Camera.main.ScreenPointToRay (crosshair.GetComponent<RectTransform>().position);
+			Debug.DrawRay(ray.origin,ray.direction,Color.magenta);
+
+			if(Physics.Raycast(ray,out hit ,maxGrappleDist)) 
+			{
                 int layerTrash = 1 << hit.collider.gameObject.layer;
-                if ((layerTrash & grappleMask.value) != 0) {
-                    crosshair.GetComponent<Image>().color = new Color(255, 0, 0);
-                }
-
-
-            }else {
-                crosshair.GetComponent<Image>().color = new Color(0, 0, 255);
-
+				if ((layerTrash & grappleMask.value) != 0) 
+				{
+					crosshair.GetComponent<Image> ().color = new Color (255, 0, 0);
+				}
             }
-            if (Input.GetButtonDown("Fire2")) {
-
-
-
-                if (Physics.Raycast(ray, out hit, maxGrappleDist)) {
-                    int layerTrash = 1 << hit.collider.gameObject.layer;
-                    if ((layerTrash & grappleMask.value) != 0) {
-                        //myLR.SetPosition(1, hit.point);
-                        myRB.AddForce(myCam.transform.forward * 2000.0f);
-                    }
-                }
-            }
-            Debug.Log(myRB.velocity);
+			else if (Physics.SphereCast(ray, hitRadius, out hit, maxGrappleDist)) {
+				//Debug.Log("You selected the " + hit.transform.name);
+				int layerTrash = 1 << hit.collider.gameObject.layer;
+				if ((layerTrash & grappleMask.value) != 0) 
+				{
+					crosshair.GetComponent<Image>().color = new Color(255, 0, 0);
+				}
+			}
+			else {
+				crosshair.GetComponent<Image> ().color = new Color (0, 0, 0);
+			}
         }
 
 
         #region Grappling Hook Stuff
         if (Input.GetButtonDown("Fire1")) {
             RaycastHit hit;
+			Ray ray = Camera.main.ScreenPointToRay (crosshair.GetComponent<RectTransform>().position);
             if (!grappleOn) {
                 if (Physics.Raycast(ray, out hit, maxGrappleDist)) {
                     int layerTrash = 1 << hit.collider.gameObject.layer;
