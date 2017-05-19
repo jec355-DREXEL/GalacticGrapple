@@ -2,48 +2,66 @@
 
 
 
-Keyboard and Mouse:
-
-“Driver”:
-
-WASD Keys: Vehicle Movement (Forward, Backward, Left, Right)
-
-J Button: Boost Jump
+KEYBOARD AND MOUSE
 
 
 
-“Grappler”:
+Player 1:
 
-Mouse: Player Horizontal and Vertical Look Movement
+WASD: Reticle Movement - Horizontal_P1, Vertical_P1
+Arrow Keys: Thrusters
+ - Horizontal_Thrusters,Vertical_Thrusters
+F: Shoot Grapple- Grapple_P1
+Q: Push Player
+ - Push_P1
+E: Pull Player - Pull_P1
 
-Left Mouse Button: Fire Grappling Hook (Click again to cut the grapple line)
 
-E button: Pull Player to Grapple Point
 
-R button: Push Player away from Grapple Point
+Player 2:
+
+IJKL: Reticle Movement- Horizontal_P2, Vertical_P2
+Arrow Keys: Thrusters- Horizontal_Thrusters,Vertical_Thrusters
+H: Shoot Grapple
+ - Grapple_P2
+U: Push Player
+ - Push_P2
+O: Pull Player- Pull_P2
 
 
 Backspace Button: Restart Game
 
-Controllers:
+ - Restart
 
-"Driver"
-Left stick: Vehicle Movement (Forward, Backward, Left, Right)
-
-A Button: Boost Jump
-
-
-“Grappler”:
-
-left stick: Player Horizontal and Vertical Look Movement
-
-A Button: Fire Grappling Hook (Click again to cut the grapple line)
-
-B button: Pull Player to Grapple Point
-
-X button: Push Player away from Grapple Point
+-------------------------------------------------
 
 
 
-Both:
+XBOX CONTROLLER
+
+
+
+Player 1:
+
+Right Stick: Reticle Movement - Horizontal_P1, Vertical_P1
+Left Stick: Thrusters- Horizontal_Thrusters,Vertical_Thrusters
+Right Bumper: Shoot Grapple- Grapple_P1
+Right Trigger: Pull Player- Push_P1
+Left Trigger: Push Player
+
+ - Pull_P1
+
+Player 2:
+
+Right Stick: Reticle Movement - Horizontal_P2, Vertical_P2
+Left Stick: Thrusters
+ - Horizontal_Thrusters,Vertical_Thrusters
+Right Bumper: Shoot Grapple- Grapple_P2
+Right Trigger: Pull Player- Push_P1
+Left Trigger: Push Player - Pull_P2
+
+
+
 Start Button: Restart Game
+
+ - Restart
