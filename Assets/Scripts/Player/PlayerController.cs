@@ -77,7 +77,7 @@ class PlayerController : MonoBehaviour {
 			}
 			*/
         } else {
-            Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal_P1"), Input.GetAxisRaw("Vertical_P1"));
 
             Vector2 temp = crosshair.transform.position;
             temp.x += input.x * crosshairSpeed * Time.deltaTime;
