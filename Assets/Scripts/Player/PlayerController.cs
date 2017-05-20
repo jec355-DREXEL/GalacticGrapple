@@ -7,8 +7,8 @@ class PlayerController : MonoBehaviour {
 
     #region grappleVars
     ConfigurableJoint myJoint;
-    public float maxGrappleDist = 30f;
-    public float winchSpeed = 0.5f;
+    public float maxGrappleDist = 50f;
+    public float winchSpeed = 5f;
     public float winchMomentumGain = 100f;
     public float hitRadius = 1.25f;
     public bool grappleOn = false;
@@ -16,18 +16,16 @@ class PlayerController : MonoBehaviour {
     public LineRenderer myLR = null;
     private SoftJointLimit jointLimit = new SoftJointLimit();
     private RaycastHit hit;
+	Ray ray;
     #endregion
 
     #region miscVars
     public Camera myCam = null;
     private Rigidbody myRB;
 
-    public float moveSpeed = 1.0f;
-    public float maxVelocity = 10.0f;
 	public Image player1_crosshair;
 	public Image player2_crosshair;
     public float crosshairSpeed = 100f;
-    Ray ray;
     #endregion
 
     private void Start() {
@@ -43,28 +41,36 @@ class PlayerController : MonoBehaviour {
         myLR.enabled = false;
     }
 
-    private void Update() {
+    private void Update() 
+	{
         DoGrappleStuff();
     }
 
-    void DoGrappleStuff() {
-        if (grappleOn) {
+    void DoGrappleStuff() 
+	{
+        if (grappleOn) 
+		{
             myLR.SetPosition(0, myLR.transform.position);
             #region Winch Stuff
-			if (Input.GetButtonDown("Pull_P1")) {
-                //Debug.Log("Pull");
+			if (Input.GetButtonDown("Pull_P1")) 
+			{
+				Debug.Log(Input.GetButtonDown("Pull_P1"));
                 jointLimit.limit -= winchSpeed * Time.deltaTime;
-                if (jointLimit.limit < .5) {
+                if (jointLimit.limit < .5) 
+				{
                     jointLimit.limit = 0.5f;
                 }
                 myJoint.linearLimit = jointLimit;
                 Vector3 thingy = myJoint.connectedAnchor - this.transform.position;
                 thingy.Normalize();
                 myRB.AddForceAtPosition(thingy * winchMomentumGain * Time.deltaTime, thingy * (-this.transform.localScale.x / 5), ForceMode.Acceleration);
-			} else if (Input.GetButtonDown("Push_P1")) {
+			} 
+			if (Input.GetButtonDown("Push_P1")) 
+			{
                 //Debug.Log("Push");
                 jointLimit.limit += winchSpeed * Time.deltaTime;
-                if (jointLimit.limit > maxGrappleDist) {
+                if (jointLimit.limit > maxGrappleDist) 
+				{
                     jointLimit.limit = maxGrappleDist;
                 }
                 myJoint.linearLimit = jointLimit;

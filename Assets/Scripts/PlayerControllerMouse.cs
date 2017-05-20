@@ -33,13 +33,16 @@ class PlayerControllerMouse : MonoBehaviour {
 	public Vector2 hotSpot = Vector2.zero;
 	#endregion
 
-	private void Start() {
+	private void Start() 
+	{
 		myJoint = this.GetComponent<ConfigurableJoint>();
-		if (myLR == null) {
+		if (myLR == null) 
+		{
 			Debug.LogWarning("No linerenderer set, attempting to find on one the gameobject");
 			this.GetComponent<LineRenderer>();
 		}
-		if (myCam == null) {
+		if (myCam == null) 
+		{
 			FindObjectOfType<Camera>();
 		}
 		myRB = this.GetComponent<Rigidbody>();
@@ -55,23 +58,28 @@ class PlayerControllerMouse : MonoBehaviour {
 
 
 	void DoGrappleStuff() {
-		if (grappleOn) {
+		if (grappleOn) 
+		{
 			myLR.SetPosition (0, myLR.transform.position);
 			#region Winch Stuff
-			if (Input.GetAxisRaw ("Pull/Push") > 0) {
+			if (Input.GetAxisRaw ("Pull/Push") > 0) 
+			{
 				Debug.Log ("Pull");
 				jointLimit.limit -= winchSpeed * Time.deltaTime;
-				if (jointLimit.limit < .5) {
+				if (jointLimit.limit < .5) 
+				{
 					jointLimit.limit = 0.5f;
 				}
 				myJoint.linearLimit = jointLimit;
 				Vector3 thingy = myJoint.connectedAnchor - this.transform.position;
 				thingy.Normalize ();
 				myRB.AddForceAtPosition (thingy * winchMomentumGain * Time.deltaTime, thingy * (-this.transform.localScale.x / 5), ForceMode.Acceleration);
-			} else if (Input.GetAxisRaw ("Pull/Push") < 0) {
+			} else if (Input.GetAxisRaw ("Pull/Push") < 0) 
+			{
 				Debug.Log ("Push");
 				jointLimit.limit += winchSpeed * Time.deltaTime;
-				if (jointLimit.limit > maxGrappleDist) {
+				if (jointLimit.limit > maxGrappleDist)
+				{
 					jointLimit.limit = maxGrappleDist;
 				}
 				myJoint.linearLimit = jointLimit;
