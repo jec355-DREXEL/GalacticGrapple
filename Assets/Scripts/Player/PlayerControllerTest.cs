@@ -18,6 +18,7 @@ class PlayerControllerTest : MonoBehaviour {
     public LineRenderer myLR = null;
     private SoftJointLimit jointLimit = new SoftJointLimit();
     private RaycastHit hit;
+	private RaycastHit Grapple_hit;
 	Ray ray;
     #endregion
 
@@ -46,12 +47,14 @@ class PlayerControllerTest : MonoBehaviour {
     private void Update() 
 	{
         DoGrappleStuff();
+		GrappleSlack();
     }
 
     void DoGrappleStuff() 
 	{
         if (grappleOn) 
 		{
+
 			if (grappleOn_P1) 
 			{
 				
@@ -59,7 +62,10 @@ class PlayerControllerTest : MonoBehaviour {
 				#region Winch Stuff
 				if (Input.GetButtonDown ("Pull_P1")) 
 				{
+
+
 					jointLimit.limit -= winchSpeed * Time.deltaTime;
+					Debug.Log(jointLimit.limit);
 					if (jointLimit.limit < .5) 
 					{
 						jointLimit.limit = 0.5f;
@@ -146,25 +152,25 @@ class PlayerControllerTest : MonoBehaviour {
 		}
 
 
-			if (Input.GetButtonDown ("Grapple_P1")) {
-				RaycastHit hit_P1;
+			if (Input.GetButtonDown ("Grapple_P1")) 
+			{
 				Ray ray_P1 = Camera.main.ScreenPointToRay (player1_crosshair.GetComponent<RectTransform> ().position);
 				if (!grappleOn || grappleOn_P2 == true) {
-					if (Physics.Raycast (ray_P1, out hit_P1, maxGrappleDist)) {
-						int layerTrash = 1 << hit_P1.collider.gameObject.layer;
+				if (Physics.Raycast (ray_P1, out Grapple_hit, maxGrappleDist)) {
+					int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
 						if ((layerTrash & grappleMask.value) != 0) {
 							grappleOn_P1 = true;
 							grappleOn_P2 = false;
-						myRB.angularVelocity = Vector3.zero;
-							MakeGrappleHook (hit_P1.point);
+							//myRB.angularVelocity = Vector3.zero;
+						MakeGrappleHook (Grapple_hit.point);
 						}
-					} else if (Physics.SphereCast (ray_P1, hitRadius, out hit_P1, maxGrappleDist)) {
-						int layerTrash = 1 << hit_P1.collider.gameObject.layer;
+				} else if (Physics.SphereCast (ray_P1, hitRadius, out Grapple_hit, maxGrappleDist)) {
+					int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
 						if ((layerTrash & grappleMask.value) != 0) {
 							grappleOn_P1 = true;
 							grappleOn_P2 = false;
-						myRB.angularVelocity = Vector3.zero;
-							MakeGrappleHook (hit_P1.point);
+							//myRB.angularVelocity = Vector3.zero;
+						MakeGrappleHook (Grapple_hit.point);
 						}
 					}
 				} else {
@@ -207,35 +213,38 @@ class PlayerControllerTest : MonoBehaviour {
 		}
 
 
-			if (Input.GetButtonDown ("Grapple_P2")) {
-				RaycastHit hit_P2;
+			if (Input.GetButtonDown ("Grapple_P2")) 
+			{
 				Ray ray_P2 = Camera.main.ScreenPointToRay (player2_crosshair.GetComponent<RectTransform> ().position);
 				if (!grappleOn || grappleOn_P1 == true) {
-					if (Physics.Raycast (ray_P2, out hit_P2, maxGrappleDist)) {
-						int layerTrash = 1 << hit_P2.collider.gameObject.layer;
+				if (Physics.Raycast (ray_P2, out Grapple_hit, maxGrappleDist)) {
+					int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
 						if ((layerTrash & grappleMask.value) != 0) {
 							grappleOn_P1 = false;
 							grappleOn_P2 = true;
-							myRB.angularVelocity = Vector3.zero;
-							MakeGrappleHook (hit_P2.point);
+							//myRB.angularVelocity = Vector3.zero;
+						MakeGrappleHook (Grapple_hit.point);
 						}
-					} else if (Physics.SphereCast (ray_P2, hitRadius, out hit_P2, maxGrappleDist)) {
-						int layerTrash = 1 << hit_P2.collider.gameObject.layer;
+				} else if (Physics.SphereCast (ray_P2, hitRadius, out Grapple_hit, maxGrappleDist)) {
+					int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
 						if ((layerTrash & grappleMask.value) != 0) {
 							grappleOn_P1 = false;
 							grappleOn_P2 = true;
-						myRB.angularVelocity = Vector3.zero;
-							MakeGrappleHook (hit_P2.point);
+							//myRB.angularVelocity = Vector3.zero;
+						MakeGrappleHook (Grapple_hit.point);
 						}
 					}
-				} else {
+				} 
+				else 
+				{
 					grappleOn = false;
 					jointLimit.limit = Mathf.Infinity;
 					myJoint.linearLimit = jointLimit;
 					myLR.enabled = false;
 					myRB.AddForce (0, 300.0f, 0);
 				}
-		}
+			}
+			
     }
 
     void MakeGrappleHook(Vector3 point) 
@@ -247,4 +256,13 @@ class PlayerControllerTest : MonoBehaviour {
         myLR.enabled = true;
         myLR.SetPosition(1, point);
     }
+
+	void GrappleSlack() 
+	{
+		if (grappleOn)
+		{
+			jointLimit.limit = (this.transform.position - Grapple_hit.point).magnitude;
+			myJoint.linearLimit = jointLimit;
+		}
+	}
 }
