@@ -15,7 +15,8 @@ class PlayerControllerTest : MonoBehaviour {
 	public bool grappleOn_P1 = false;
 	public bool grappleOn_P2 = false;
     public LayerMask grappleMask;
-    public LineRenderer myLR = null;
+    public LineRenderer myLR_P1 = null;
+    public LineRenderer myLR_P2 = null;
     private SoftJointLimit jointLimit = new SoftJointLimit();
     private RaycastHit hit;
 	private RaycastHit Grapple_hit;
@@ -33,7 +34,7 @@ class PlayerControllerTest : MonoBehaviour {
 
     private void Start() {
         myJoint = this.GetComponent<ConfigurableJoint>();
-        if (myLR == null) {
+        if (myLR_P1 == null) {
             Debug.LogWarning("No linerenderer set, attempting to find on one the gameobject");
             this.GetComponent<LineRenderer>();
         }
@@ -41,7 +42,7 @@ class PlayerControllerTest : MonoBehaviour {
             FindObjectOfType<Camera>();
         }
         myRB = this.GetComponent<Rigidbody>();
-        myLR.enabled = false;
+        myLR_P1.enabled = false;
     }
 
     private void Update() 
@@ -58,7 +59,7 @@ class PlayerControllerTest : MonoBehaviour {
 			if (grappleOn_P1) 
 			{
 				
-				myLR.SetPosition (0, myLR.transform.position);
+				myLR_P1.SetPosition (0, myLR_P1.transform.position);
 				#region Winch Stuff
 				if (Input.GetButtonDown ("Pull_P1")) 
 				{
@@ -91,7 +92,7 @@ class PlayerControllerTest : MonoBehaviour {
 			} 
 			else if (grappleOn_P2) 
 			{
-				myLR.SetPosition (0, myLR.transform.position);
+				myLR_P1.SetPosition (0, myLR_P1.transform.position);
 				#region Winch Stuff
 				if (Input.GetButtonDown ("Pull_P2")) 
 				{
@@ -123,7 +124,7 @@ class PlayerControllerTest : MonoBehaviour {
         }
 
 
-		if (!grappleOn || grappleOn_P2) {
+		//if (!grappleOn || grappleOn_P2) {
 			//PLAYER 1 GRAPPLE
 			Vector2 player1_Input = new Vector2 (Input.GetAxisRaw ("Horizontal_P1"), Input.GetAxisRaw ("Vertical_P1"));
 
@@ -149,7 +150,7 @@ class PlayerControllerTest : MonoBehaviour {
 			} else {
 				player1_crosshair.GetComponent<Image> ().color = new Color (255, 0, 0);
 			}
-		}
+		//}
 
 
 			if (Input.GetButtonDown ("Grapple_P1")) 
@@ -177,14 +178,14 @@ class PlayerControllerTest : MonoBehaviour {
 					grappleOn = false;
 					jointLimit.limit = Mathf.Infinity;
 					myJoint.linearLimit = jointLimit;
-					myLR.enabled = false;
+					myLR_P1.enabled = false;
 					myRB.AddForce (0, 300.0f, 0);
 				}
 			}
 		
 
 
-		if (!grappleOn || grappleOn_P1) {
+		//if (!grappleOn || grappleOn_P1) {
 			//PLAYER 2 GRAPPLE
 			Vector2 player2_Input = new Vector2 (Input.GetAxisRaw ("Horizontal_P2"), Input.GetAxisRaw ("Vertical_P2"));
 
@@ -194,7 +195,7 @@ class PlayerControllerTest : MonoBehaviour {
 			player2_crosshair.transform.position = temp2;
 
 			Ray ray2 = Camera.main.ScreenPointToRay (player2_crosshair.GetComponent<RectTransform> ().position);
-			Debug.DrawRay (ray2.origin, ray2.direction, Color.magenta);
+			Debug.DrawRay (ray2.origin, ray2.direction, Color.cyan);
 
 			if (Physics.Raycast (ray2, out hit, maxGrappleDist)) {
 				int layerTrash = 1 << hit.collider.gameObject.layer;
@@ -210,7 +211,7 @@ class PlayerControllerTest : MonoBehaviour {
 			} else {
 				player2_crosshair.GetComponent<Image> ().color = new Color (0, 0, 255);
 			}
-		}
+		//}
 
 
 			if (Input.GetButtonDown ("Grapple_P2")) 
@@ -240,7 +241,7 @@ class PlayerControllerTest : MonoBehaviour {
 					grappleOn = false;
 					jointLimit.limit = Mathf.Infinity;
 					myJoint.linearLimit = jointLimit;
-					myLR.enabled = false;
+					myLR_P1.enabled = false;
 					myRB.AddForce (0, 300.0f, 0);
 				}
 			}
@@ -253,8 +254,8 @@ class PlayerControllerTest : MonoBehaviour {
         myJoint.connectedAnchor = point;
         jointLimit.limit = (this.transform.position - point).magnitude;
         myJoint.linearLimit = jointLimit;
-        myLR.enabled = true;
-        myLR.SetPosition(1, point);
+        myLR_P1.enabled = true;
+        myLR_P1.SetPosition(1, point);
     }
 
 	void GrappleSlack() 
