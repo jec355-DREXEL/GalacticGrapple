@@ -32,29 +32,29 @@ public class ThrusterController : MonoBehaviour
 		//if (!playerGrappling) 
 		//{
 		
-			if (Input.GetButtonDown ("Horizontal_Thrusters")) {
+		//	if (Input.GetButtonDown ("Horizontal_Thrusters")) {
 				if (Input.GetAxis ("Horizontal_Thrusters") > 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
 					myRB.AddForce (thrustForce, thrustForce, 0);
-				} else {
+				} else if (Input.GetAxis("Horizontal_Thrusters") < 0){
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
 					myRB.AddForce (-thrustForce, thrustForce, 0);
 				}
-			}
+		//	}
 
-			if (Input.GetButtonDown ("Vertical_Thrusters")) {
+			//if (Input.GetButtonDown ("Vertical_Thrusters")) {
 				if (Input.GetAxis ("Vertical_Thrusters") > 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
 					myRB.AddForce (0, thrustForce, thrustForce);
-				} else {
+				} else if (Input.GetAxis("Vertical_Thrusters") < 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
 					myRB.AddForce (0, thrustForce, -thrustForce);
 				}
-			}
+			//}
 		
 		//}
 	}
