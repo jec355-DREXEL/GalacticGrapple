@@ -9,7 +9,7 @@ public class ThrusterController : MonoBehaviour
 
 	public float thrustForce = 300.0f;
 	public bool playerGrappling = false;
-
+    private float cooldown= 0f;
 	private GameObject thePlayer;
 	private PlayerController playerScript;
 
@@ -28,34 +28,39 @@ public class ThrusterController : MonoBehaviour
 	{
 		playerGrappling = playerScript.grappleOn;
 		//Debug.Log (playerGrappling);
-
-		//if (!playerGrappling) 
-		//{
+        
+		if (cooldown<=0) {
 		
 		//	if (Input.GetButtonDown ("Horizontal_Thrusters")) {
 				if (Input.GetAxis ("Horizontal_Thrusters") > 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddForce (thrustForce, thrustForce, 0);
+					myRB.AddRelativeForce (thrustForce, thrustForce, 0);
+                    cooldown = 5f;
 				} else if (Input.GetAxis("Horizontal_Thrusters") < 0){
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddForce (-thrustForce, thrustForce, 0);
-				}
+					myRB.AddRelativeForce(-thrustForce, thrustForce, 0);
+                    cooldown = 5f;
+            }
 		//	}
 
 			//if (Input.GetButtonDown ("Vertical_Thrusters")) {
 				if (Input.GetAxis ("Vertical_Thrusters") > 0) {
+                    //myRB.velocity = Vector3.zero;
+                    //myRB.angularVelocity = Vector3.zero;
+                    myRB.AddRelativeForce(0, thrustForce, thrustForce);
+                    cooldown = 5f;
+            } else if (Input.GetAxis("Vertical_Thrusters") < 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddForce (0, thrustForce, thrustForce);
-				} else if (Input.GetAxis("Vertical_Thrusters") < 0) {
-					//myRB.velocity = Vector3.zero;
-					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddForce (0, thrustForce, -thrustForce);
-				}
-			//}
-		
-		//}
+					myRB.AddRelativeForce(0, thrustForce, -thrustForce);
+                cooldown = 5f;
+            }
+            //}
+
+        }else {
+            cooldown -= Time.deltaTime;
+        }
 	}
 }

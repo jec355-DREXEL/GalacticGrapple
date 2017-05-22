@@ -24,6 +24,7 @@ class PlayerControllerTest : MonoBehaviour {
     #endregion
 
     #region miscVars
+    private Transform myTransform = null;
     public Camera myCam = null;
     private Rigidbody myRB;
 
@@ -33,6 +34,7 @@ class PlayerControllerTest : MonoBehaviour {
     #endregion
 
     private void Start() {
+        myTransform = GetComponent<Transform>();
         myJoint = this.GetComponent<ConfigurableJoint>();
         if (myLR_P1 == null) {
             Debug.LogWarning("No linerenderer set, attempting to find on one the gameobject");
@@ -130,11 +132,21 @@ class PlayerControllerTest : MonoBehaviour {
 			Vector2 player1_Input = new Vector2 (Input.GetAxisRaw ("Horizontal_P1"), Input.GetAxisRaw ("Vertical_P1"));
 
 			Vector2 temp = player1_crosshair.transform.position;
-			temp.x += player1_Input.x * crosshairSpeed * Time.deltaTime;
-			temp.y += player1_Input.y * crosshairSpeed * Time.deltaTime;
-			player1_crosshair.transform.position = temp;
+			
 
-			Ray ray = Camera.main.ScreenPointToRay (player1_crosshair.GetComponent<RectTransform> ().position);
+            if ((player1_crosshair.transform.position.x + hitRadius < 1515 && player1_Input.x>0)) {
+                temp.x += player1_Input.x * crosshairSpeed * Time.deltaTime;     
+            }else if((player1_crosshair.transform.position.x + hitRadius > 20 && player1_Input.x < 0)) {
+            temp.x += player1_Input.x * crosshairSpeed * Time.deltaTime;
+            }
+            if ((player1_crosshair.transform.position.y + hitRadius < 672 && player1_Input.y>0)){
+                temp.y += player1_Input.y * crosshairSpeed * Time.deltaTime;
+            }
+            if(player1_crosshair.transform.position.y - hitRadius > 20 && player1_Input.y<0) {
+                temp.y += player1_Input.y * crosshairSpeed * Time.deltaTime;
+            }
+            player1_crosshair.transform.position = temp;
+            Ray ray = Camera.main.ScreenPointToRay (player1_crosshair.GetComponent<RectTransform> ().position);
 			Debug.DrawRay (ray.origin, ray.direction, Color.magenta);
 
 			if (Physics.Raycast (ray, out hit, maxGrappleDist)) {
@@ -268,7 +280,21 @@ class PlayerControllerTest : MonoBehaviour {
 		}
 	}
     void CameraLook() {
-        Vector2 cam = new Vector2(Input.GetAxis("Horizontal_Camera"), Input.GetAxis("Vertical_Camera"));
-        myCam.transform.Rotate(new Vector3(cam.y, cam.x, 0));
+        RectTransform p1 = player1_crosshair.rectTransform;
+        RectTransform p2 = player2_crosshair.rectTransform;
+        float x = 0f;
+        float y = 0;
+        Debug.Log(p1.position);
+        if ((p1.position.x+hitRadius >1450 && p2.position.x + hitRadius > 1450)) {
+            x += 1;
+        }else if((p1.position.x - hitRadius < 50 && p2.position.x - hitRadius < 50)) {
+            x -= 1;
+        }
+        if ((p1.position.y - hitRadius < 50 && p2.position.y - hitRadius < 50)) {
+            y += 1;
+        } else if ((p1.position.y + hitRadius > 600 && p2.position.y + hitRadius > 600)) {
+            y -= 1;
+        }
+        myTransform.Rotate(new Vector3(y, x, 0));
     }
 }
