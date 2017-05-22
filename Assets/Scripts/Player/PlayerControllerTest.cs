@@ -169,24 +169,22 @@ class PlayerControllerTest : MonoBehaviour {
 			if (Input.GetButtonDown ("Grapple_P1")) 
 			{
 				Ray ray_P1 = Camera.main.ScreenPointToRay (player1_crosshair.GetComponent<RectTransform> ().position);
-				if (!grappleOn || grappleOn_P2 == true) {
-				if (Physics.Raycast (ray_P1, out Grapple_hit, maxGrappleDist)) {
-					int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
-						if ((layerTrash & grappleMask.value) != 0) {
-							grappleOn_P1 = true;
-							grappleOn_P2 = false;
-							//myRB.angularVelocity = Vector3.zero;
-						MakeGrappleHook (Grapple_hit.point);
-						}
-				} else if (Physics.SphereCast (ray_P1, hitRadius, out Grapple_hit, maxGrappleDist)) {
-					int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
-						if ((layerTrash & grappleMask.value) != 0) {
-							grappleOn_P1 = true;
-							grappleOn_P2 = false;
-							//myRB.angularVelocity = Vector3.zero;
-						MakeGrappleHook (Grapple_hit.point);
-						}
-					}
+				if (!grappleOn_P1) {
+				    if (Physics.Raycast (ray_P1, out Grapple_hit, maxGrappleDist)) {
+					    int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
+						    if ((layerTrash & grappleMask.value) != 0) {
+							    grappleOn_P1 = true;
+							    //myRB.angularVelocity = Vector3.zero;
+						        MakeGrappleHook (Grapple_hit.point);
+						    }
+				        } else if (Physics.SphereCast (ray_P1, hitRadius, out Grapple_hit, maxGrappleDist)) {
+					        int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
+						    if ((layerTrash & grappleMask.value) != 0) {
+							    grappleOn_P1 = true;
+							    //myRB.angularVelocity = Vector3.zero;
+						        MakeGrappleHook (Grapple_hit.point);
+						    }
+					    }
 				} else {
 					grappleOn = false;
 					jointLimit.limit = Mathf.Infinity;
@@ -203,9 +201,18 @@ class PlayerControllerTest : MonoBehaviour {
 			Vector2 player2_Input = new Vector2 (Input.GetAxisRaw ("Horizontal_P2"), Input.GetAxisRaw ("Vertical_P2"));
 
 			Vector2 temp2 = player2_crosshair.transform.position;
-			temp2.x += player2_Input.x * crosshairSpeed * Time.deltaTime;
-			temp2.y += player2_Input.y * crosshairSpeed * Time.deltaTime;
-			player2_crosshair.transform.position = temp2;
+        if ((player2_crosshair.transform.position.x + hitRadius < 1515 && player2_Input.x > 0)) {
+            temp2.x += player2_Input.x * crosshairSpeed * Time.deltaTime;
+        } else if ((player2_crosshair.transform.position.x + hitRadius > 20 && player2_Input.x < 0)) {
+            temp2.x += player2_Input.x * crosshairSpeed * Time.deltaTime;
+        }
+        if ((player2_crosshair.transform.position.y + hitRadius < 672 && player2_Input.y > 0)) {
+            temp2.y += player2_Input.y * crosshairSpeed * Time.deltaTime;
+        }
+        if (player2_crosshair.transform.position.y - hitRadius > 20 && player2_Input.y < 0) {
+            temp2.y += player2_Input.y * crosshairSpeed * Time.deltaTime;
+        }
+        player2_crosshair.transform.position = temp2;
 
 			Ray ray2 = Camera.main.ScreenPointToRay (player2_crosshair.GetComponent<RectTransform> ().position);
 			Debug.DrawRay (ray2.origin, ray2.direction, Color.cyan);
