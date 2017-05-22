@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ThrusterController : MonoBehaviour 
 {
-
+    //ADD RELATIVE FORCE
 	private Rigidbody myRB;
 
 	public float thrustForce = 300.0f;

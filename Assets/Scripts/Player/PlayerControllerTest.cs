@@ -47,6 +47,7 @@ class PlayerControllerTest : MonoBehaviour {
 
     private void Update() 
 	{
+        CameraLook();
         DoGrappleStuff();
 		GrappleSlack();
     }
@@ -266,4 +267,8 @@ class PlayerControllerTest : MonoBehaviour {
 			myJoint.linearLimit = jointLimit;
 		}
 	}
+    void CameraLook() {
+        Vector2 cam = new Vector2(Input.GetAxis("Horizontal_Camera"), Input.GetAxis("Vertical_Camera"));
+        myCam.transform.Rotate(new Vector3(cam.y, cam.x, 0));
+    }
 }
