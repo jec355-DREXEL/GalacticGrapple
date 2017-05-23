@@ -187,6 +187,7 @@ class PlayerControllerTest : MonoBehaviour {
 					    }
 				} else {
 					grappleOn = false;
+                    grappleOn_P1 = false;
 					jointLimit.limit = Mathf.Infinity;
 					myJoint.linearLimit = jointLimit;
 					myLR_P1.enabled = false;
@@ -237,35 +238,29 @@ class PlayerControllerTest : MonoBehaviour {
 			if (Input.GetButtonDown ("Grapple_P2")) 
 			{
 				Ray ray_P2 = Camera.main.ScreenPointToRay (player2_crosshair.GetComponent<RectTransform> ().position);
-				if (!grappleOn || grappleOn_P1 == true) {
-				if (Physics.Raycast (ray_P2, out Grapple_hit, maxGrappleDist)) {
-					int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
-						if ((layerTrash & grappleMask.value) != 0) {
-							grappleOn_P1 = false;
+				if (!grappleOn_P2) {
+				    if (Physics.Raycast (ray_P2, out Grapple_hit, maxGrappleDist)) {
+					    int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
+						    if ((layerTrash & grappleMask.value) != 0) {
+							    grappleOn_P2 = true;
+							    //myRB.angularVelocity = Vector3.zero;
+						        MakeGrappleHook (Grapple_hit.point);
+						    }
+				        } else if (Physics.SphereCast (ray_P2, hitRadius, out Grapple_hit, maxGrappleDist)) {
+					        int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
 							grappleOn_P2 = true;
 							//myRB.angularVelocity = Vector3.zero;
-						MakeGrappleHook (Grapple_hit.point);
+						    MakeGrappleHook (Grapple_hit.point);
 						}
-				} else if (Physics.SphereCast (ray_P2, hitRadius, out Grapple_hit, maxGrappleDist)) {
-					int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
-						if ((layerTrash & grappleMask.value) != 0) {
-							grappleOn_P1 = false;
-							grappleOn_P2 = true;
-							//myRB.angularVelocity = Vector3.zero;
-						MakeGrappleHook (Grapple_hit.point);
-						}
-					}
-				} 
-				else 
-				{
-					grappleOn = false;
-					jointLimit.limit = Mathf.Infinity;
-					myJoint.linearLimit = jointLimit;
-					myLR_P1.enabled = false;
-					myRB.AddForce (0, 300.0f, 0);
-				}
-			}
-			
+				}else {
+					    grappleOn = false;
+                        grappleOn_P2 = false;
+                        jointLimit.limit = Mathf.Infinity;
+					    myJoint.linearLimit = jointLimit;
+					    myLR_P1.enabled = false;
+					    myRB.AddForce (0, 300.0f, 0);
+		        }
+			}	
     }
 
     void MakeGrappleHook(Vector3 point) 
