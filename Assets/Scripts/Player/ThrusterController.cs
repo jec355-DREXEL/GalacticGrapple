@@ -1,17 +1,20 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class ThrusterController : MonoBehaviour 
 {
     //ADD RELATIVE FORCE
 	private Rigidbody myRB;
 
-	public float thrustForce = 300.0f;
-	public bool playerGrappling = false;
+	public float ThrustForce = 300.0f;
+	private bool playerGrappling = false;
+	public Text countText1;
+	private int ThrusterCount;
     private float cooldown= 0f;
 	private GameObject thePlayer;
-	private PlayerController playerScript;
+	private PlayerControllerTest playerScript;
 
 	// Use this for initialization
 	void Start () 
@@ -19,7 +22,7 @@ public class ThrusterController : MonoBehaviour
 		myRB = this.GetComponent<Rigidbody>();
 
 		thePlayer = GameObject.Find("Player");
-		playerScript = thePlayer.GetComponent<PlayerController>();
+		playerScript = thePlayer.GetComponent<PlayerControllerTest>();
 
 	}
 	
@@ -27,40 +30,59 @@ public class ThrusterController : MonoBehaviour
 	void Update ()
 	{
 		playerGrappling = playerScript.grappleOn;
+		ThrusterCount = playerScript.ThrustForce;
 		//Debug.Log (playerGrappling);
-        
-		if (cooldown<=0) {
+		if (ThrusterCount > 0) 
+		{
+			if (cooldown <= 0) 
+			{
 		
-		//	if (Input.GetButtonDown ("Horizontal_Thrusters")) {
+				//	if (Input.GetButtonDown ("Horizontal_Thrusters")) {
 				if (Input.GetAxis ("Horizontal_Thrusters") > 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddRelativeForce (thrustForce, thrustForce, 0);
-                    cooldown = 5f;
-				} else if (Input.GetAxis("Horizontal_Thrusters") < 0){
+					myRB.AddRelativeForce (ThrustForce, ThrustForce, 0);
+					cooldown = 5f;
+					ThrusterCount--;
+					playerScript.ThrustForce = ThrusterCount;
+				} else if (Input.GetAxis ("Horizontal_Thrusters") < 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddRelativeForce(-thrustForce, thrustForce, 0);
-                    cooldown = 5f;
-            }
-		//	}
+					myRB.AddRelativeForce (-ThrustForce, ThrustForce, 0);
+					cooldown = 5f;
+					ThrusterCount--;
+					playerScript.ThrustForce = ThrusterCount;
+				}
+				//	}
 
-			//if (Input.GetButtonDown ("Vertical_Thrusters")) {
+				//if (Input.GetButtonDown ("Vertical_Thrusters")) {
 				if (Input.GetAxis ("Vertical_Thrusters") > 0) {
-                    //myRB.velocity = Vector3.zero;
-                    //myRB.angularVelocity = Vector3.zero;
-                    myRB.AddRelativeForce(0, thrustForce, thrustForce);
-                    cooldown = 5f;
-            } else if (Input.GetAxis("Vertical_Thrusters") < 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddRelativeForce(0, thrustForce, -thrustForce);
-                cooldown = 5f;
-            }
-            //}
+					myRB.AddRelativeForce (0, ThrustForce, ThrustForce);
+					cooldown = 5f;
+					ThrusterCount--;
+					playerScript.ThrustForce = ThrusterCount;
+				} else if (Input.GetAxis ("Vertical_Thrusters") < 0) {
+					//myRB.velocity = Vector3.zero;
+					//myRB.angularVelocity = Vector3.zero;
+					myRB.AddRelativeForce (0, ThrustForce, -ThrustForce);
+					cooldown = 5f;
+					ThrusterCount--;
+					playerScript.ThrustForce = ThrusterCount;
+				}
+				//}
 
-        }else {
-            cooldown -= Time.deltaTime;
-        }
+			} else {
+				cooldown -= Time.deltaTime;
+			}
+			SetCountText ();
+		}
+	}
+
+	void SetCountText ()
+	{
+		countText1.text = "Thruster Count: " + ThrusterCount.ToString ();
+		Debug.Log (playerScript.ThrustForce);
 	}
 }

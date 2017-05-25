@@ -30,7 +30,9 @@ class PlayerControllerTest : MonoBehaviour {
 
 	public Image player1_crosshair;
 	public Image player2_crosshair;
-    public float crosshairSpeed = 100f;
+	public float crosshairSpeed = 100f;
+	public Text countText;
+	public int ThrustForce = 4;
     #endregion
 
     private void Start() {
@@ -43,6 +45,8 @@ class PlayerControllerTest : MonoBehaviour {
         myRB = this.GetComponent<Rigidbody>();
 		myLR_P1.enabled = false;
 		myLR_P2.enabled = false;
+
+		SetCountText ();
     }
 
     private void Update() 
@@ -313,4 +317,20 @@ class PlayerControllerTest : MonoBehaviour {
         }
         myTransform.Rotate(new Vector3(y, x, 0));
     }
+
+	void OnTriggerEnter(Collider other) 
+	{
+		if (other.gameObject.CompareTag ("Pick Up"))
+		{
+			other.gameObject.SetActive (false);
+
+			ThrustForce = ThrustForce + 1;
+			SetCountText ();
+		}
+	}
+
+	void SetCountText ()
+	{
+		countText.text = "Thruster Count: " + ThrustForce.ToString ();
+	}
 }
