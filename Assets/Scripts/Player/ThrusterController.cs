@@ -83,6 +83,6 @@ public class ThrusterController : MonoBehaviour
 	void SetCountText ()
 	{
 		countText1.text = "Thruster Count: " + ThrusterCount.ToString ();
-		Debug.Log (playerScript.ThrustForce);
+		//Debug.Log (playerScript.ThrustForce);
 	}
 }
