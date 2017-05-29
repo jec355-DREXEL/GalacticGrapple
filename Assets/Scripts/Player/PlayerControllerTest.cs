@@ -36,7 +36,11 @@ class PlayerControllerTest : MonoBehaviour {
 	public Image player2_crosshair;
 	public float crosshairSpeed = 100f;
 	public Text countText;
-	public int ThrustForce = 4;
+	public int ThrustCount = 4;
+	public Text MiningcountText;
+	private int MiningAsteroidCount = 0;
+	public int MiningAsteroidEndCount = 10;
+	public Text gameoverText;
 	#endregion
 
 	private void Start() {
@@ -64,7 +68,8 @@ class PlayerControllerTest : MonoBehaviour {
 	void DoGrappleStuff() 
 	{
 		if (grappleOn) {
-			if (grappleOn_Mining) {
+			if (grappleOn_Mining) 
+			{
 				myLR_Mining.SetPosition (0, myLR_Mining.transform.position);
 			} else if (grappleOn_P1) {
 				myLR_P1.SetPosition (0, myLR_P1.transform.position);
@@ -255,17 +260,25 @@ class PlayerControllerTest : MonoBehaviour {
 				{
 					if ((Physics.Raycast (ray_P1, out Grapple_hit, maxGrappleDist)) && (Physics.Raycast (ray_P2, out Grapple_hit, maxGrappleDist))) {
 						int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
+						//Debug.Log (Grapple_hit.collider.gameObject.layer);
 						if (layerTrash == miningAsteroidMask.value) 
 						{
 							MiningGrapple (Grapple_hit.point);
+							Grapple_hit.collider.gameObject.layer = 8;
+							MiningAsteroidCount++;
 							hit.transform.GetComponent<Renderer> ().material.color = Color.green;
+							SetCountText ();
 						}
 					} else if ((Physics.SphereCast (ray_P1, hitRadius, out Grapple_hit, maxGrappleDist)) && (Physics.SphereCast (ray_P2, hitRadius, out Grapple_hit, maxGrappleDist))) {
 						int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
+						//Debug.Log (Grapple_hit.collider.gameObject.layer);
 						if (layerTrash == miningAsteroidMask.value) 
 						{
 							MiningGrapple (Grapple_hit.point);
+							Grapple_hit.collider.gameObject.layer = 8;
+							MiningAsteroidCount++;
 							hit.transform.GetComponent<Renderer> ().material.color = Color.green;
+							SetCountText ();
 						}
 					}
 				}
@@ -373,13 +386,20 @@ class PlayerControllerTest : MonoBehaviour {
 		{
 			other.gameObject.SetActive (false);
 
-			ThrustForce = ThrustForce + 1;
+			ThrustCount = ThrustCount + 1;
 			SetCountText ();
 		}
 	}
 
 	void SetCountText ()
 	{
-		countText.text = "Thruster Count: " + ThrustForce.ToString ();
+		countText.text = "Thruster Count: " + ThrustCount.ToString();
+		MiningcountText.text = "Mining Count: " + MiningAsteroidCount.ToString() + "/" + MiningAsteroidEndCount.ToString();
+
+		if(MiningAsteroidCount >= MiningAsteroidEndCount)
+		{
+			Debug.Log ("GAMEOVER");
+			gameoverText.GetComponent<Text> ().enabled = true;
+		}
 	}
 }

@@ -30,7 +30,7 @@ public class ThrusterController : MonoBehaviour
 	void Update ()
 	{
 		playerGrappling = playerScript.grappleOn;
-		ThrusterCount = playerScript.ThrustForce;
+		ThrusterCount = playerScript.ThrustCount;
 		//Debug.Log (playerGrappling);
 		if (ThrusterCount > 0) 
 		{
@@ -44,14 +44,14 @@ public class ThrusterController : MonoBehaviour
 					myRB.AddRelativeForce (ThrustForce, ThrustForce, 0);
 					cooldown = 5f;
 					ThrusterCount--;
-					playerScript.ThrustForce = ThrusterCount;
+					playerScript.ThrustCount = ThrusterCount;
 				} else if (Input.GetAxis ("Horizontal_Thrusters") < 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
 					myRB.AddRelativeForce (-ThrustForce, ThrustForce, 0);
 					cooldown = 5f;
 					ThrusterCount--;
-					playerScript.ThrustForce = ThrusterCount;
+					playerScript.ThrustCount = ThrusterCount;
 				}
 				//	}
 
@@ -62,14 +62,14 @@ public class ThrusterController : MonoBehaviour
 					myRB.AddRelativeForce (0, ThrustForce, ThrustForce);
 					cooldown = 5f;
 					ThrusterCount--;
-					playerScript.ThrustForce = ThrusterCount;
+					playerScript.ThrustCount = ThrusterCount;
 				} else if (Input.GetAxis ("Vertical_Thrusters") < 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
 					myRB.AddRelativeForce (0, ThrustForce, -ThrustForce);
 					cooldown = 5f;
 					ThrusterCount--;
-					playerScript.ThrustForce = ThrusterCount;
+					playerScript.ThrustCount = ThrusterCount;
 				}
 				//}
 
