@@ -34,7 +34,7 @@ class PlayerControllerTest : MonoBehaviour {
 
 	public Image player1_crosshair;
 	public Image player2_crosshair;
-	public float crosshairSpeed = 100f;
+	public float crosshairSpeed = 750f;
 	public Text countText;
 	public int ThrustCount = 4;
 	public Text MiningcountText;
@@ -92,12 +92,12 @@ class PlayerControllerTest : MonoBehaviour {
 		Vector2 player1_Input = new Vector2 (Input.GetAxisRaw ("Horizontal_P1"), Input.GetAxisRaw ("Vertical_P1"));
 		Vector2 temp = player1_crosshair.transform.position;
 
-		if ((player1_crosshair.transform.position.x + hitRadius < 1515 && player1_Input.x>0)) {
+		if ((player1_crosshair.transform.position.x + hitRadius < 1260 && player1_Input.x>0)) {
 			temp.x += player1_Input.x * crosshairSpeed * Time.deltaTime;     
 		}else if((player1_crosshair.transform.position.x + hitRadius > 20 && player1_Input.x < 0)) {
 			temp.x += player1_Input.x * crosshairSpeed * Time.deltaTime;
 		}
-		if ((player1_crosshair.transform.position.y + hitRadius < 672 && player1_Input.y>0)){
+		if ((player1_crosshair.transform.position.y + hitRadius < 700 && player1_Input.y>0)){
 			temp.y += player1_Input.y * crosshairSpeed * Time.deltaTime;
 		}
 		if(player1_crosshair.transform.position.y - hitRadius > 20 && player1_Input.y<0) {
@@ -172,12 +172,12 @@ class PlayerControllerTest : MonoBehaviour {
 		Vector2 player2_Input = new Vector2 (Input.GetAxisRaw ("Horizontal_P2"), Input.GetAxisRaw ("Vertical_P2"));
 
 		Vector2 temp2 = player2_crosshair.transform.position;
-		if ((player2_crosshair.transform.position.x + hitRadius < 1515 && player2_Input.x > 0)) {
+		if ((player2_crosshair.transform.position.x + hitRadius < 1260 && player2_Input.x > 0)) {
 			temp2.x += player2_Input.x * crosshairSpeed * Time.deltaTime;
 		} else if ((player2_crosshair.transform.position.x + hitRadius > 20 && player2_Input.x < 0)) {
 			temp2.x += player2_Input.x * crosshairSpeed * Time.deltaTime;
 		}
-		if ((player2_crosshair.transform.position.y + hitRadius < 672 && player2_Input.y > 0)) {
+		if ((player2_crosshair.transform.position.y + hitRadius < 700 && player2_Input.y > 0)) {
 			temp2.y += player2_Input.y * crosshairSpeed * Time.deltaTime;
 		}
 		if (player2_crosshair.transform.position.y - hitRadius > 20 && player2_Input.y < 0) {
@@ -367,14 +367,14 @@ class PlayerControllerTest : MonoBehaviour {
 		float x = 0f;
 		float y = 0;
 
-		if ((p1.position.x+hitRadius >1450 && p2.position.x + hitRadius > 1450)) {
+		if ((p1.position.x+hitRadius >1000 && p2.position.x + hitRadius > 1000)) {
 			x += 1;
 		}else if((p1.position.x - hitRadius < 50 && p2.position.x - hitRadius < 50)) {
 			x -= 1;
 		}
-		if ((p1.position.y - hitRadius < 50 && p2.position.y - hitRadius < 50)) {
+		if ((p1.position.y - hitRadius < 50 && p2.position.y - hitRadius < 50&& y < 5)) {
 			y += 1;
-		} else if ((p1.position.y + hitRadius > 600 && p2.position.y + hitRadius > 600)) {
+		} else if ((p1.position.y + hitRadius > 740 && p2.position.y + hitRadius > 640&& y > -5)) {
 			y -= 1;
 		}
 		myTransform.Rotate(new Vector3(y, x, 0));

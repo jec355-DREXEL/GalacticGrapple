@@ -8,7 +8,7 @@ public class ThrusterController : MonoBehaviour
     //ADD RELATIVE FORCE
 	private Rigidbody myRB;
 
-	public float ThrustForce = 300.0f;
+	public float ThrustForce = 600.0f;
 	private bool playerGrappling = false;
 	public Text countText1;
 	private int ThrusterCount;
@@ -36,19 +36,19 @@ public class ThrusterController : MonoBehaviour
 		{
 			if (cooldown <= 0) 
 			{
-		
+                Vector2 input = new Vector2(Input.GetAxis("Horizontal_Thrusters"), Input.GetAxis("Vertical_Thrusters"));
 				//	if (Input.GetButtonDown ("Horizontal_Thrusters")) {
-				if (Input.GetAxis ("Horizontal_Thrusters") > 0) {
+				if (input.x > 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddRelativeForce (ThrustForce, ThrustForce, 0);
+					myRB.AddRelativeForce (ThrustForce * input.x* 10, ThrustForce*input.x*10, 0);
 					cooldown = 5f;
 					ThrusterCount--;
 					playerScript.ThrustCount = ThrusterCount;
 				} else if (Input.GetAxis ("Horizontal_Thrusters") < 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddRelativeForce (-ThrustForce, ThrustForce, 0);
+					myRB.AddRelativeForce (ThrustForce * input.x*10, ThrustForce * input.x*10, 0);
 					cooldown = 5f;
 					ThrusterCount--;
 					playerScript.ThrustCount = ThrusterCount;
@@ -59,14 +59,14 @@ public class ThrusterController : MonoBehaviour
 				if (Input.GetAxis ("Vertical_Thrusters") > 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddRelativeForce (0, ThrustForce, ThrustForce);
+					myRB.AddRelativeForce (0, ThrustForce*input.y*10, ThrustForce* input.y*10);
 					cooldown = 5f;
 					ThrusterCount--;
 					playerScript.ThrustCount = ThrusterCount;
 				} else if (Input.GetAxis ("Vertical_Thrusters") < 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
-					myRB.AddRelativeForce (0, ThrustForce, -ThrustForce);
+					myRB.AddRelativeForce (0, ThrustForce * input.y*10, ThrustForce * input.y*10);
 					cooldown = 5f;
 					ThrusterCount--;
 					playerScript.ThrustCount = ThrusterCount;
