@@ -161,13 +161,16 @@ class PlayerControllerTest : MonoBehaviour {
 				}
 			} else 
 			{
-				grappleOn = false;
-				grappleOn_P1 = false;
+                if (!grappleOn_P2) {
+                    grappleOn = false;
+                    audio.PlayOneShot(grappleOffAudio);
+                }
+                grappleOn_P1 = false;
 				jointLimit.limit = Mathf.Infinity;
 				myJoint.linearLimit = jointLimit;
 				myLR_P1.enabled = false;
 				myRB.AddForce (0, 300.0f, 0);
-                audio.PlayOneShot(grappleOffAudio);
+
             }
 		}
 
@@ -244,13 +247,15 @@ class PlayerControllerTest : MonoBehaviour {
 			} 
 			else 
 			{
-				grappleOn = false;
+                if (!grappleOn_P1) {
+                    grappleOn = false;
+                    audio.PlayOneShot(grappleOffAudio);
+                }
 				grappleOn_P2 = false;
 				jointLimit.limit = Mathf.Infinity;
 				myJoint.linearLimit = jointLimit;
 				myLR_P2.enabled = false;
 				myRB.AddForce (0, 300.0f, 0);
-                audio.PlayOneShot(grappleOffAudio);
             }
         }
 
