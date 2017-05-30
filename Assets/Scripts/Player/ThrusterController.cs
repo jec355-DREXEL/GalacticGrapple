@@ -15,6 +15,8 @@ public class ThrusterController : MonoBehaviour
     private float cooldown= 0f;
 	private GameObject thePlayer;
 	private PlayerControllerTest playerScript;
+    public AudioClip thrust;
+    public AudioSource audio;
 
 	// Use this for initialization
 	void Start () 
@@ -45,14 +47,16 @@ public class ThrusterController : MonoBehaviour
 					cooldown = 5f;
 					ThrusterCount--;
 					playerScript.ThrustCount = ThrusterCount;
-				} else if (Input.GetAxis ("Horizontal_Thrusters") < 0) {
+                    audio.PlayOneShot(thrust);
+                } else if (Input.GetAxis ("Horizontal_Thrusters") < 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
 					myRB.AddRelativeForce (ThrustForce * input.x*10, ThrustForce * input.x*10, 0);
 					cooldown = 5f;
 					ThrusterCount--;
 					playerScript.ThrustCount = ThrusterCount;
-				}
+                    audio.PlayOneShot(thrust);
+                }
 				//	}
 
 				//if (Input.GetButtonDown ("Vertical_Thrusters")) {
@@ -63,14 +67,16 @@ public class ThrusterController : MonoBehaviour
 					cooldown = 5f;
 					ThrusterCount--;
 					playerScript.ThrustCount = ThrusterCount;
-				} else if (Input.GetAxis ("Vertical_Thrusters") < 0) {
+                    audio.PlayOneShot(thrust);
+                } else if (Input.GetAxis ("Vertical_Thrusters") < 0) {
 					//myRB.velocity = Vector3.zero;
 					//myRB.angularVelocity = Vector3.zero;
 					myRB.AddRelativeForce (0, ThrustForce * input.y*10, ThrustForce * input.y*10);
 					cooldown = 5f;
 					ThrusterCount--;
 					playerScript.ThrustCount = ThrusterCount;
-				}
+                    audio.PlayOneShot(thrust);
+                }
 				//}
 
 			} else {
@@ -83,6 +89,6 @@ public class ThrusterController : MonoBehaviour
 	void SetCountText ()
 	{
 		countText1.text = "Thruster Count: " + ThrusterCount.ToString ();
-		//Debug.Log (playerScript.ThrustForce);
+        //Debug.Log (playerScript.ThrustForce);
 	}
 }

@@ -41,6 +41,11 @@ class PlayerControllerTest : MonoBehaviour {
 	private int MiningAsteroidCount = 0;
 	public int MiningAsteroidEndCount = 10;
 	public Text gameoverText;
+    public AudioSource audio;
+    public AudioClip mineAudio;
+    public AudioClip grappleOnAudio;
+    public AudioClip grappleOffAudio;
+    public AudioClip endAudio;
 	#endregion
 
 	private void Start() {
@@ -162,7 +167,8 @@ class PlayerControllerTest : MonoBehaviour {
 				myJoint.linearLimit = jointLimit;
 				myLR_P1.enabled = false;
 				myRB.AddForce (0, 300.0f, 0);
-			}
+                audio.PlayOneShot(grappleOffAudio);
+            }
 		}
 
 
@@ -244,8 +250,9 @@ class PlayerControllerTest : MonoBehaviour {
 				myJoint.linearLimit = jointLimit;
 				myLR_P2.enabled = false;
 				myRB.AddForce (0, 300.0f, 0);
-			}
-		}
+                audio.PlayOneShot(grappleOffAudio);
+            }
+        }
 
 		//Debug.Log (trigger_down);
 
@@ -279,7 +286,7 @@ class PlayerControllerTest : MonoBehaviour {
 							MiningAsteroidCount++;
 							hit.transform.GetComponent<Renderer> ().material.color = Color.green;
 							SetCountText ();
-						}
+                        }
 					}
 				}
 
@@ -307,10 +314,8 @@ class PlayerControllerTest : MonoBehaviour {
 	{
 		grappleOn = true;
 		grappleOn_P1 = true;
-		grappleOn_P2 = false;
 
 		myLR_P1.enabled = true;
-		myLR_P2.enabled = false;
 		myLR_Mining.enabled = false;
 
 		myJoint.connectedAnchor = point;
@@ -318,15 +323,14 @@ class PlayerControllerTest : MonoBehaviour {
 		myJoint.linearLimit = jointLimit;
 
 		myLR_P1.SetPosition(1, point);
-	}
+        audio.PlayOneShot(grappleOnAudio);
+    }
 
 	void P2_ShootGrapple(Vector3 point) 
 	{
 		grappleOn = true;
-		grappleOn_P1 = false;
 		grappleOn_P2 = true;
 
-		myLR_P1.enabled = false;
 		myLR_P2.enabled = true;
 		myLR_Mining.enabled = false;
 
@@ -335,6 +339,7 @@ class PlayerControllerTest : MonoBehaviour {
 		myJoint.linearLimit = jointLimit;
 
 		myLR_P2.SetPosition(1, point);
+        audio.PlayOneShot(grappleOnAudio);
 	}
 
 	void MiningGrapple(Vector3 point) 
@@ -351,7 +356,8 @@ class PlayerControllerTest : MonoBehaviour {
 		myJoint.linearLimit = jointLimit;
 
 		myLR_Mining.SetPosition(1, point);
-	}
+        audio.PlayOneShot(mineAudio);
+    }
 
 	void GrappleSlack() 
 	{
@@ -400,6 +406,7 @@ class PlayerControllerTest : MonoBehaviour {
 		{
 			Debug.Log ("GAMEOVER");
 			gameoverText.GetComponent<Text> ().enabled = true;
+            audio.PlayOneShot(endAudio);
 		}
 	}
 }
