@@ -3,6 +3,20 @@ All notable changes to this project will be documented in this file.
 
 Galactic Grapple
 
+#Date: May 30,2017 V. 1.00
+-New leve
+-Able to mine Crystals from asteriods
+-Collect free floating crystals
+-Updated Coop grapple
+-Audio
+
+#Date: May 23, 2017
+-Updated level
+-Lock camera
+-two reticles
+-Thrusters!
+-New Controls
+
 #Date: May 16, 2017
 -Updated level
 -Added player vehicle
