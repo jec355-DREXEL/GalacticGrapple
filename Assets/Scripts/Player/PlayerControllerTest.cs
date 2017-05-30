@@ -161,10 +161,9 @@ class PlayerControllerTest : MonoBehaviour {
 				}
 			} else 
 			{
-                if (!grappleOn_P2) {
-                    grappleOn = false;
-                    audio.PlayOneShot(grappleOffAudio);
-                }
+                grappleOn = false;
+                audio.PlayOneShot(grappleOffAudio);
+             
                 grappleOn_P1 = false;
 				jointLimit.limit = Mathf.Infinity;
 				myJoint.linearLimit = jointLimit;
@@ -247,10 +246,9 @@ class PlayerControllerTest : MonoBehaviour {
 			} 
 			else 
 			{
-                if (!grappleOn_P1) {
-                    grappleOn = false;
-                    audio.PlayOneShot(grappleOffAudio);
-                }
+                grappleOn = false;
+                audio.PlayOneShot(grappleOffAudio);
+       
 				grappleOn_P2 = false;
 				jointLimit.limit = Mathf.Infinity;
 				myJoint.linearLimit = jointLimit;
@@ -319,8 +317,10 @@ class PlayerControllerTest : MonoBehaviour {
 	{
 		grappleOn = true;
 		grappleOn_P1 = true;
+		grappleOn_P2 = false;
 
 		myLR_P1.enabled = true;
+		myLR_P2.enabled = false;
 		myLR_Mining.enabled = false;
 
 		myJoint.connectedAnchor = point;
@@ -334,8 +334,10 @@ class PlayerControllerTest : MonoBehaviour {
 	void P2_ShootGrapple(Vector3 point) 
 	{
 		grappleOn = true;
+		grappleOn_P1 = false;
 		grappleOn_P2 = true;
 
+		myLR_P1.enabled = false;
 		myLR_P2.enabled = true;
 		myLR_Mining.enabled = false;
 
