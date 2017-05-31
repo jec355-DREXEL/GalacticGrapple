@@ -40,13 +40,18 @@ class PlayerControllerTest : MonoBehaviour {
 	public Text MiningcountText;
 	private int MiningAsteroidCount = 0;
 	public int MiningAsteroidEndCount = 10;
+	public Text DistanceTraveledText;
+	private float distanceTraveled = 0;
+	private float startPosition;
 	public Text gameoverText;
+
     public AudioSource audio;
     public AudioClip mineAudio;
     public AudioClip grappleOnAudio;
     public AudioClip grappleOffAudio;
     public AudioClip endAudio;
 	#endregion
+
 
 	private void Start() {
 		myTransform = GetComponent<Transform>();
@@ -56,9 +61,12 @@ class PlayerControllerTest : MonoBehaviour {
 			FindObjectOfType<Camera>();
 		}
 		myRB = this.GetComponent<Rigidbody>();
+
 		myLR_P1.enabled = false;
 		myLR_P2.enabled = false;
 		myLR_Mining.enabled = false;
+
+		startPosition = transform.position.z;
 
 		SetCountText ();
 	}
@@ -68,6 +76,11 @@ class PlayerControllerTest : MonoBehaviour {
 		CameraLook();
 		DoGrappleStuff();
 		GrappleSlack();
+
+		distanceTraveled = transform.position.z - startPosition;
+		Debug.Log (distanceTraveled);
+
+		SetCountText ();
 	}
 
 	void DoGrappleStuff() 
@@ -408,6 +421,7 @@ class PlayerControllerTest : MonoBehaviour {
 	{
 		countText.text = "Thruster Count: " + ThrustCount.ToString();
 		MiningcountText.text = "Mining Count: " + MiningAsteroidCount.ToString() + "/" + MiningAsteroidEndCount.ToString();
+		DistanceTraveledText.text = "Distance Traveled: " + Mathf.RoundToInt(distanceTraveled).ToString() + " m";
 
 		if(MiningAsteroidCount >= MiningAsteroidEndCount)
 		{
