@@ -78,14 +78,16 @@ class PlayerControllerTest : MonoBehaviour {
 		GrappleSlack();
 
 		distanceTraveled = transform.position.z - startPosition;
-		Debug.Log (distanceTraveled);
 
 		SetCountText ();
+
+		Debug.Log (myRB.velocity.magnitude);
 	}
 
 	void DoGrappleStuff() 
 	{
 		if (grappleOn) {
+			//myRB.AddForce(myRB.velocity.normalized * Time.deltaTime * 10);
 			if (grappleOn_Mining) 
 			{
 				myLR_Mining.SetPosition (0, myLR_Mining.transform.position);
@@ -123,9 +125,12 @@ class PlayerControllerTest : MonoBehaviour {
 		}
 		player1_crosshair.transform.position = temp;
 		Ray ray = Camera.main.ScreenPointToRay (player1_crosshair.GetComponent<RectTransform> ().position);
+
 		Debug.DrawRay (ray.origin, ray.direction, Color.magenta);
 
-		if (Physics.Raycast (ray, out hit, maxGrappleDist)) {
+		if (Physics.Raycast (ray, out hit, maxGrappleDist)) 
+		{
+			//Debug.Log (hit.collider.gameObject.transform.position);
 			int layerTrash = 1 << hit.collider.gameObject.layer;
 			if (layerTrash == grappleMask.value)
 			{
@@ -136,6 +141,7 @@ class PlayerControllerTest : MonoBehaviour {
 				player1_crosshair.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
 			}
 		} else if (Physics.SphereCast (ray, hitRadius, out hit, maxGrappleDist)) {
+			//Debug.Log (hit.collider.gameObject.transform.position);
 			//Debug.Log("You selected the " + hit.transform.name);
 			int layerTrash = 1 << hit.collider.gameObject.layer;
 			if (layerTrash == grappleMask.value) 
@@ -323,7 +329,7 @@ class PlayerControllerTest : MonoBehaviour {
 			trigger_down = false;
 		}
 
-
+	
 	}
 
 	void P1_ShootGrapple(Vector3 point) 
