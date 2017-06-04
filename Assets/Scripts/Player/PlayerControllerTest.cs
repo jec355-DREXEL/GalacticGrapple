@@ -81,7 +81,7 @@ class PlayerControllerTest : MonoBehaviour {
 
 		SetCountText ();
 
-		Debug.Log (myRB.velocity.magnitude);
+		//Debug.Log (myRB.velocity.magnitude);
 	}
 
 	void DoGrappleStuff() 
@@ -275,8 +275,9 @@ class PlayerControllerTest : MonoBehaviour {
 				myRB.AddForce (0, 300.0f, 0);
             }
         }
+			
 
-		//Debug.Log (trigger_down);
+		Debug.Log (trigger_down);
 
 		if (Input.GetAxisRaw ("Mining_P1") == 1 && Input.GetAxisRaw ("Mining_P2") == 1) 
 		{
@@ -325,8 +326,9 @@ class PlayerControllerTest : MonoBehaviour {
 				myJoint.linearLimit = jointLimit;
 				myLR_Mining.enabled = false;
 				myRB.AddForce (0, 300.0f, 0);
+
+				trigger_down = false;
 			}
-			trigger_down = false;
 		}
 
 	
