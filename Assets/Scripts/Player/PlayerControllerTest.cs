@@ -45,6 +45,14 @@ class PlayerControllerTest : MonoBehaviour {
 	private float startPosition;
 	public Text gameoverText;
 
+	public Sprite Player1ReticleEmpty;
+	public Sprite Player1ReticleLockOn;
+	public Sprite Player1ReticleMining;
+
+	public Sprite Player2ReticleEmpty;
+	public Sprite Player2ReticleLockOn;
+	public Sprite Player2ReticleMining;
+
     public AudioSource audio;
     public AudioClip mineAudio;
     public AudioClip grappleOnAudio;
@@ -138,11 +146,14 @@ class PlayerControllerTest : MonoBehaviour {
 			if (layerTrash == grappleMask.value)
 			{
 				player1_crosshair.GetComponent<Image> ().color = new Color32(255, 0, 255, 255);
+				player1_crosshair.GetComponent<Image> ().sprite = Player1ReticleLockOn;
+
 			}
 			//If raycast layer is miningAsteroidMask, then reticle color = orange
 			else if (layerTrash == miningAsteroidMask.value)
 			{
 				player1_crosshair.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
+				player1_crosshair.GetComponent<Image> ().sprite = Player1ReticleMining;
 			}
 		} 
 		else if (Physics.SphereCast (ray, hitRadius, out hit, maxGrappleDist)) 
@@ -153,17 +164,20 @@ class PlayerControllerTest : MonoBehaviour {
 			if (layerTrash == grappleMask.value) 
 			{
 				player1_crosshair.GetComponent<Image> ().color = new Color32 (255, 0, 255, 255);
+				player1_crosshair.GetComponent<Image> ().sprite = Player1ReticleLockOn;
 			}
 			//If spherecast layer is miningAsteroidMask, then reticle color = orange
 			else if (layerTrash == miningAsteroidMask.value)
 			{
 				player1_crosshair.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
+				player1_crosshair.GetComponent<Image> ().sprite = Player1ReticleMining;
 			}
 		} 
 		//Else reticle color = red
 		else 
 		{
 			player1_crosshair.GetComponent<Image> ().color = new Color32 (255, 0, 0, 255);
+			player1_crosshair.GetComponent<Image> ().sprite = Player1ReticleEmpty;
 		}
 
 
@@ -233,11 +247,14 @@ class PlayerControllerTest : MonoBehaviour {
 			if (layerTrash == grappleMask.value)
 			{
 				player2_crosshair.GetComponent<Image> ().color = new Color32 (67, 255, 255, 255);
+				player2_crosshair.GetComponent<Image> ().sprite = Player2ReticleLockOn;
+
 			}
 			//If raycast layer is miningAsteroidMask, then reticle color = orange
 			else if (layerTrash == miningAsteroidMask.value)
 			{
 				player2_crosshair.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
+				player2_crosshair.GetComponent<Image> ().sprite = Player2ReticleMining;
 			}
 		} 
 		else if (Physics.SphereCast (ray2, hitRadius, out hit, maxGrappleDist)) 
@@ -248,17 +265,20 @@ class PlayerControllerTest : MonoBehaviour {
 			if (layerTrash == grappleMask.value)
 			{
 				player2_crosshair.GetComponent<Image> ().color = new Color32 (67, 255, 255, 255);
+				player2_crosshair.GetComponent<Image> ().sprite = Player2ReticleLockOn;
 			}
 			//If spherecast layer is miningAsteroidMask, then reticle color = orange
 			else if (layerTrash == miningAsteroidMask.value)
 			{
 				player2_crosshair.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
+				player2_crosshair.GetComponent<Image> ().sprite = Player2ReticleMining;
 			}
 		} 
 		//Else reticle color = blue
 		else 
 		{
 			player2_crosshair.GetComponent<Image> ().color = new Color32 (0, 0, 255, 255);
+			player2_crosshair.GetComponent<Image> ().sprite = Player2ReticleEmpty;
 		}
 
 
@@ -313,6 +333,7 @@ class PlayerControllerTest : MonoBehaviour {
 						//Debug.Log (Grapple_hit.collider.gameObject.layer);
 						if (layerTrash == miningAsteroidMask.value) 
 						{
+							Debug.Log ("MINING");
 							MiningGrapple (Grapple_hit.point);
 							Grapple_hit.collider.gameObject.layer = 8;
 							MiningAsteroidCount++;
@@ -324,6 +345,7 @@ class PlayerControllerTest : MonoBehaviour {
 						//Debug.Log (Grapple_hit.collider.gameObject.layer);
 						if (layerTrash == miningAsteroidMask.value) 
 						{
+							Debug.Log ("MINING");
 							MiningGrapple (Grapple_hit.point);
 							Grapple_hit.collider.gameObject.layer = 8;
 							MiningAsteroidCount++;
