@@ -32,8 +32,23 @@ class PlayerControllerTest : MonoBehaviour {
 	public Camera myCam = null;
 	private Rigidbody myRB;
 
-	public Image player1_crosshair;
-	public Image player2_crosshair;
+	public Image P1_Reticle_Inner;
+	public Image P1_Reticle_Outer;
+	public Image P1_Reticle_Timer;
+	public Image P1_Reticle_Green;
+	public Image P1_Reticle_Yellow;
+	public Image P1_Reticle_Orange;
+	public Image P1_Reticle_Purple;
+
+	public Image P2_Reticle_Inner;
+	public Image P2_Reticle_Outer;
+	public Image P2_Reticle_Timer;
+	public Image P2_Reticle_Green;
+	public Image P2_Reticle_Yellow;
+	public Image P2_Reticle_Orange;
+	public Image P2_Reticle_Purple;
+
+
 	public float crosshairSpeed = 750f;
 	public Text countText;
 	public int ThrustCount = 4;
@@ -61,6 +76,10 @@ class PlayerControllerTest : MonoBehaviour {
 	#endregion
 
 
+	public float timeLeft = 270.0f;
+	private float starttime;
+
+
 	private void Start() 
 	{
 		myTransform = GetComponent<Transform>();
@@ -77,6 +96,19 @@ class PlayerControllerTest : MonoBehaviour {
 
 		//Starting Position of Player
 		startPosition = transform.position.z;
+		//Starting Time
+		starttime = timeLeft;
+
+		//Player1 Reticles
+		P1_Reticle_Green.enabled = false;
+		P1_Reticle_Yellow.enabled = false;
+		P1_Reticle_Orange.enabled = false;
+		P1_Reticle_Purple.enabled = false;
+		//Player2 Reticles
+		P2_Reticle_Green.enabled = false;
+		P2_Reticle_Yellow.enabled = false;
+		P2_Reticle_Orange.enabled = false;
+		P2_Reticle_Purple.enabled = false;
 
 		SetCountText ();
 	}
@@ -92,6 +124,17 @@ class PlayerControllerTest : MonoBehaviour {
 		SetCountText ();
 
 		//Debug.Log (myRB.velocity.magnitude);
+
+
+		timeLeft -= Time.deltaTime;
+
+		P1_Reticle_Timer.GetComponent<Image> ().fillAmount = timeLeft / starttime;
+		P1_Reticle_Timer.GetComponent<Image> ().fillAmount = timeLeft / starttime;
+		P2_Reticle_Timer.GetComponent<Image> ().fillAmount = timeLeft / starttime;
+		P2_Reticle_Timer.GetComponent<Image> ().fillAmount = timeLeft / starttime;
+
+		Debug.Log (timeLeft);
+
 	}
 
 	void DoGrappleStuff() 
@@ -120,22 +163,28 @@ class PlayerControllerTest : MonoBehaviour {
 		Vector2 player1_Input = new Vector2 (Input.GetAxisRaw ("Horizontal_P1"), Input.GetAxisRaw ("Vertical_P1"));
 
 		//Player 1 reticle movement
-		Vector2 temp = player1_crosshair.transform.position;
-		if ((player1_crosshair.transform.position.x + hitRadius < 1260 && player1_Input.x>0)) {
+		Vector2 temp = P1_Reticle_Outer.transform.position;
+		if ((P1_Reticle_Outer.transform.position.x + hitRadius < 1260 && player1_Input.x>0)) {
 			temp.x += player1_Input.x * crosshairSpeed * Time.deltaTime;     
-		}else if((player1_crosshair.transform.position.x + hitRadius > 20 && player1_Input.x < 0)) {
+		}else if((P1_Reticle_Outer.transform.position.x + hitRadius > 20 && player1_Input.x < 0)) {
 			temp.x += player1_Input.x * crosshairSpeed * Time.deltaTime;
 		}
-		if ((player1_crosshair.transform.position.y + hitRadius < 700 && player1_Input.y>0)){
+		if ((P1_Reticle_Outer.transform.position.y + hitRadius < 700 && player1_Input.y>0)){
 			temp.y += player1_Input.y * crosshairSpeed * Time.deltaTime;
 		}
-		if(player1_crosshair.transform.position.y - hitRadius > 20 && player1_Input.y<0) {
+		if(P1_Reticle_Outer.transform.position.y - hitRadius > 20 && player1_Input.y<0) {
 			temp.y += player1_Input.y * crosshairSpeed * Time.deltaTime;
 		}
-		player1_crosshair.transform.position = temp;
+		P1_Reticle_Inner.transform.position = temp;
+		P1_Reticle_Outer.transform.position = temp;
+		P1_Reticle_Timer.transform.position = temp;
+		P1_Reticle_Green.transform.position = temp;
+		P1_Reticle_Yellow.transform.position = temp;
+		P1_Reticle_Orange.transform.position = temp;
+		P1_Reticle_Purple.transform.position = temp;
 
 		//Shooting Raycast from Player to reticle position
-		Ray ray = Camera.main.ScreenPointToRay (player1_crosshair.GetComponent<RectTransform> ().position);
+		Ray ray = Camera.main.ScreenPointToRay (P1_Reticle_Outer.GetComponent<RectTransform> ().position);
 		Debug.DrawRay (ray.origin, ray.direction, Color.magenta);
 
 		if (Physics.Raycast (ray, out hit, maxGrappleDist)) 
@@ -145,15 +194,15 @@ class PlayerControllerTest : MonoBehaviour {
 			//If raycast layer is grappleMask, then reticle color = pink
 			if (layerTrash == grappleMask.value)
 			{
-				player1_crosshair.GetComponent<Image> ().color = new Color32(255, 0, 255, 255);
-				player1_crosshair.GetComponent<Image> ().sprite = Player1ReticleLockOn;
+				P1_Reticle_Inner.GetComponent<Image> ().color = new Color32(255, 0, 255, 255);
+				P1_Reticle_Outer.GetComponent<Image> ().color = new Color32(255, 0, 255, 255);
 
 			}
 			//If raycast layer is miningAsteroidMask, then reticle color = orange
 			else if (layerTrash == miningAsteroidMask.value)
 			{
-				player1_crosshair.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
-				player1_crosshair.GetComponent<Image> ().sprite = Player1ReticleMining;
+				P1_Reticle_Inner.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
+				P1_Reticle_Outer.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
 			}
 		} 
 		else if (Physics.SphereCast (ray, hitRadius, out hit, maxGrappleDist)) 
@@ -163,27 +212,27 @@ class PlayerControllerTest : MonoBehaviour {
 			//If spherecast layer is grappleMask, then reticle color = pink
 			if (layerTrash == grappleMask.value) 
 			{
-				player1_crosshair.GetComponent<Image> ().color = new Color32 (255, 0, 255, 255);
-				player1_crosshair.GetComponent<Image> ().sprite = Player1ReticleLockOn;
+				P1_Reticle_Inner.GetComponent<Image> ().color = new Color32 (255, 0, 255, 255);
+				P1_Reticle_Outer.GetComponent<Image> ().color = new Color32 (255, 0, 255, 255);
 			}
 			//If spherecast layer is miningAsteroidMask, then reticle color = orange
 			else if (layerTrash == miningAsteroidMask.value)
 			{
-				player1_crosshair.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
-				player1_crosshair.GetComponent<Image> ().sprite = Player1ReticleMining;
+				P1_Reticle_Inner.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
+				P1_Reticle_Outer.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
 			}
 		} 
 		//Else reticle color = red
 		else 
 		{
-			player1_crosshair.GetComponent<Image> ().color = new Color32 (255, 0, 0, 255);
-			player1_crosshair.GetComponent<Image> ().sprite = Player1ReticleEmpty;
+			P1_Reticle_Inner.GetComponent<Image> ().color = new Color32 (255, 0, 0, 255);
+			P1_Reticle_Outer.GetComponent<Image> ().color = new Color32 (255, 0, 0, 255);
 		}
 
 
 		if (Input.GetButtonDown ("Grapple_P1")) 
 		{
-			Ray ray_P1 = Camera.main.ScreenPointToRay (player1_crosshair.GetComponent<RectTransform> ().position);
+			Ray ray_P1 = Camera.main.ScreenPointToRay (P1_Reticle_Outer.GetComponent<RectTransform> ().position);
 			if (!grappleOn_P1) 
 			{
 				if (Physics.Raycast (ray_P1, out Grapple_hit, maxGrappleDist)) 
@@ -221,22 +270,28 @@ class PlayerControllerTest : MonoBehaviour {
 		Vector2 player2_Input = new Vector2 (Input.GetAxisRaw ("Horizontal_P2"), Input.GetAxisRaw ("Vertical_P2"));
 
 		//Player 2 reticle movement
-		Vector2 temp2 = player2_crosshair.transform.position;
-		if ((player2_crosshair.transform.position.x + hitRadius < 1260 && player2_Input.x > 0)) {
+		Vector2 temp2 = P2_Reticle_Outer.transform.position;
+		if ((P2_Reticle_Outer.transform.position.x + hitRadius < 1260 && player2_Input.x > 0)) {
 			temp2.x += player2_Input.x * crosshairSpeed * Time.deltaTime;
-		} else if ((player2_crosshair.transform.position.x + hitRadius > 20 && player2_Input.x < 0)) {
+		} else if ((P2_Reticle_Outer.transform.position.x + hitRadius > 20 && player2_Input.x < 0)) {
 			temp2.x += player2_Input.x * crosshairSpeed * Time.deltaTime;
 		}
-		if ((player2_crosshair.transform.position.y + hitRadius < 700 && player2_Input.y > 0)) {
+		if ((P2_Reticle_Outer.transform.position.y + hitRadius < 700 && player2_Input.y > 0)) {
 			temp2.y += player2_Input.y * crosshairSpeed * Time.deltaTime;
 		}
-		if (player2_crosshair.transform.position.y - hitRadius > 20 && player2_Input.y < 0) {
+		if (P2_Reticle_Outer.transform.position.y - hitRadius > 20 && player2_Input.y < 0) {
 			temp2.y += player2_Input.y * crosshairSpeed * Time.deltaTime;
 		}
-		player2_crosshair.transform.position = temp2;
+		P2_Reticle_Inner.transform.position = temp2;
+		P2_Reticle_Outer.transform.position = temp2;
+		P2_Reticle_Timer.transform.position = temp2;
+		P2_Reticle_Green.transform.position = temp2;
+		P2_Reticle_Yellow.transform.position = temp2;
+		P2_Reticle_Orange.transform.position = temp2;
+		P2_Reticle_Purple.transform.position = temp2;
 
 		//Shooting Raycast from Player to reticle position
-		Ray ray2 = Camera.main.ScreenPointToRay (player2_crosshair.GetComponent<RectTransform> ().position);
+		Ray ray2 = Camera.main.ScreenPointToRay (P2_Reticle_Outer.GetComponent<RectTransform> ().position);
 		Debug.DrawRay (ray2.origin, ray2.direction, Color.cyan);
 
 		if (Physics.Raycast (ray2, out hit, maxGrappleDist)) 
@@ -246,15 +301,15 @@ class PlayerControllerTest : MonoBehaviour {
 			//If raycast layer is grappleMask, then reticle color = aqua
 			if (layerTrash == grappleMask.value)
 			{
-				player2_crosshair.GetComponent<Image> ().color = new Color32 (67, 255, 255, 255);
-				player2_crosshair.GetComponent<Image> ().sprite = Player2ReticleLockOn;
+				P2_Reticle_Inner.GetComponent<Image> ().color = new Color32 (67, 255, 255, 255);
+				P2_Reticle_Outer.GetComponent<Image> ().color = new Color32 (67, 255, 255, 255);
 
 			}
 			//If raycast layer is miningAsteroidMask, then reticle color = orange
 			else if (layerTrash == miningAsteroidMask.value)
 			{
-				player2_crosshair.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
-				player2_crosshair.GetComponent<Image> ().sprite = Player2ReticleMining;
+				P2_Reticle_Inner.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
+				P2_Reticle_Outer.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
 			}
 		} 
 		else if (Physics.SphereCast (ray2, hitRadius, out hit, maxGrappleDist)) 
@@ -264,27 +319,27 @@ class PlayerControllerTest : MonoBehaviour {
 			//If spherecast layer is grappleMask, then reticle color = aqua
 			if (layerTrash == grappleMask.value)
 			{
-				player2_crosshair.GetComponent<Image> ().color = new Color32 (67, 255, 255, 255);
-				player2_crosshair.GetComponent<Image> ().sprite = Player2ReticleLockOn;
+				P2_Reticle_Inner.GetComponent<Image> ().color = new Color32 (67, 255, 255, 255);
+				P2_Reticle_Outer.GetComponent<Image> ().color = new Color32 (67, 255, 255, 255);
 			}
 			//If spherecast layer is miningAsteroidMask, then reticle color = orange
 			else if (layerTrash == miningAsteroidMask.value)
 			{
-				player2_crosshair.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
-				player2_crosshair.GetComponent<Image> ().sprite = Player2ReticleMining;
+				P2_Reticle_Inner.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
+				P2_Reticle_Outer.GetComponent<Image> ().color = new Color32 (255, 120, 0, 255);
 			}
 		} 
 		//Else reticle color = blue
 		else 
 		{
-			player2_crosshair.GetComponent<Image> ().color = new Color32 (0, 0, 255, 255);
-			player2_crosshair.GetComponent<Image> ().sprite = Player2ReticleEmpty;
+			P2_Reticle_Inner.GetComponent<Image> ().color = new Color32 (0, 0, 255, 255);
+			P2_Reticle_Outer.GetComponent<Image> ().color = new Color32 (0, 0, 255, 255);
 		}
 
 
 		if (Input.GetButtonDown ("Grapple_P2")) 
 		{
-			Ray ray_P2 = Camera.main.ScreenPointToRay (player2_crosshair.GetComponent<RectTransform> ().position);
+			Ray ray_P2 = Camera.main.ScreenPointToRay (P2_Reticle_Outer.GetComponent<RectTransform> ().position);
 			if (!grappleOn_P2) 
 			{
 				if (Physics.Raycast (ray_P2, out Grapple_hit, maxGrappleDist)) 
@@ -323,8 +378,8 @@ class PlayerControllerTest : MonoBehaviour {
 		{
 			if (trigger_down == false) 
 			{
-				Ray ray_P1 = Camera.main.ScreenPointToRay (player1_crosshair.GetComponent<RectTransform> ().position);
-				Ray ray_P2 = Camera.main.ScreenPointToRay (player2_crosshair.GetComponent<RectTransform> ().position);
+				Ray ray_P1 = Camera.main.ScreenPointToRay (P1_Reticle_Inner.GetComponent<RectTransform> ().position);
+				Ray ray_P2 = Camera.main.ScreenPointToRay (P2_Reticle_Outer.GetComponent<RectTransform> ().position);
 
 				if (!grappleOn_Mining) 
 				{
@@ -442,8 +497,8 @@ class PlayerControllerTest : MonoBehaviour {
 	}
 
 	void CameraLook() {
-		RectTransform p1 = player1_crosshair.rectTransform;
-		RectTransform p2 = player2_crosshair.rectTransform;
+		RectTransform p1 = P1_Reticle_Outer.rectTransform;
+		RectTransform p2 = P2_Reticle_Outer.rectTransform;
 		float x = 0f;
 		float y = 0;
 
@@ -468,6 +523,38 @@ class PlayerControllerTest : MonoBehaviour {
 			other.gameObject.SetActive (false);
 
 			ThrustCount = ThrustCount + 1;
+			SetCountText ();
+		}
+		if (other.gameObject.CompareTag ("GreenObject"))
+		{
+			other.gameObject.SetActive (false);
+			P1_Reticle_Green.enabled = true;
+			P2_Reticle_Green.enabled = true;
+
+			SetCountText ();
+		}
+		if (other.gameObject.CompareTag ("YellowObject"))
+		{
+			other.gameObject.SetActive (false);
+			P1_Reticle_Yellow.enabled = true;
+			P2_Reticle_Yellow.enabled = true;
+
+			SetCountText ();
+		}
+		if (other.gameObject.CompareTag ("OrangeObject"))
+		{
+			other.gameObject.SetActive (false);
+			P1_Reticle_Orange.enabled = true;
+			P2_Reticle_Orange.enabled = true;
+
+			SetCountText ();
+		}
+		if (other.gameObject.CompareTag ("PurpleObject"))
+		{
+			other.gameObject.SetActive (false);
+			P1_Reticle_Purple.enabled = true;
+			P2_Reticle_Purple.enabled = true;
+
 			SetCountText ();
 		}
 	}
