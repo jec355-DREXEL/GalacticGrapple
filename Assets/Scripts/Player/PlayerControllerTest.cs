@@ -71,6 +71,7 @@ class PlayerControllerTest : MonoBehaviour {
     public AudioClip grappleOnAudio;
     public AudioClip grappleOffAudio;
     public AudioClip endAudio;
+    public bool readyToGo = false;
 	#endregion
 
 
@@ -108,30 +109,40 @@ class PlayerControllerTest : MonoBehaviour {
 		P2_Reticle_Orange.enabled = false;
 		P2_Reticle_Purple.enabled = false;
 
-		SetCountText ();
+		//SetCountText ();
 	}
 
 	private void Update() 
 	{
-		CameraLook();
-		DoGrappleStuff();
-		GrappleSlack();
+        if (readyToGo) {
+            CameraLook();
+            DoGrappleStuff();
+            GrappleSlack();
 
-		distanceTraveled = transform.position.z - startPosition;
+            distanceTraveled = transform.position.z - startPosition;
 
-		SetCountText ();
+            //SetCountText ();
 
-		//Debug.Log (myRB.velocity.magnitude);
+            //Debug.Log (myRB.velocity.magnitude);
 
 
-		timeLeft -= Time.deltaTime;
+            timeLeft -= Time.deltaTime;
 
-		P1_Reticle_Timer.GetComponent<Image> ().fillAmount = timeLeft / starttime;
-		P1_Reticle_Timer.GetComponent<Image> ().fillAmount = timeLeft / starttime;
-		P2_Reticle_Timer.GetComponent<Image> ().fillAmount = timeLeft / starttime;
-		P2_Reticle_Timer.GetComponent<Image> ().fillAmount = timeLeft / starttime;
+            P1_Reticle_Timer.GetComponent<Image>().fillAmount = timeLeft / starttime;
+            P1_Reticle_Timer.GetComponent<Image>().fillAmount = timeLeft / starttime;
+            P2_Reticle_Timer.GetComponent<Image>().fillAmount = timeLeft / starttime;
+            P2_Reticle_Timer.GetComponent<Image>().fillAmount = timeLeft / starttime;
 
-		Debug.Log (timeLeft);
+            Debug.Log(timeLeft);
+            if (timeLeft <= 0) {
+                readyToGo = false;
+            }
+        }else {
+            //OPERATOR PRESSES ENTER TO ALLOW THE GAME TO PLAY
+            if (Input.GetKeyDown(KeyCode.Return)&&timeLeft>0) {
+                readyToGo = true;
+            }
+        }
 
 	}
 
@@ -370,6 +381,7 @@ class PlayerControllerTest : MonoBehaviour {
 		//--------------------------Mining GRAPPLE--------------------------
 		//Debug.Log (trigger_down);
 		//If both Players are holding button down
+        /*
 		if (Input.GetAxisRaw ("Mining_P1") == 1 && Input.GetAxisRaw ("Mining_P2") == 1) 
 		{
 			if (trigger_down == false) 
@@ -423,7 +435,7 @@ class PlayerControllerTest : MonoBehaviour {
 				trigger_down = false;
 			}
 		}
-
+*/
 	
 	}
 
@@ -466,6 +478,7 @@ class PlayerControllerTest : MonoBehaviour {
 	}
 
 	//Mining grappling function
+    /*
 	void MiningGrapple(Vector3 point) 
 	{
 		grappleOn = true;
@@ -482,7 +495,7 @@ class PlayerControllerTest : MonoBehaviour {
 		myLR_Mining.SetPosition(1, point);
         audio.PlayOneShot(mineAudio);
     }
-
+    */
 	void GrappleSlack() 
 	{
 		if (grappleOn)
@@ -519,7 +532,7 @@ class PlayerControllerTest : MonoBehaviour {
 			other.gameObject.SetActive (false);
 
 			ThrustCount = ThrustCount + 1;
-			SetCountText ();
+			//SetCountText ();
 		}
 		if (other.gameObject.CompareTag ("GreenObject"))
 		{
@@ -527,7 +540,7 @@ class PlayerControllerTest : MonoBehaviour {
 			P1_Reticle_Green.enabled = true;
 			P2_Reticle_Green.enabled = true;
 
-			SetCountText ();
+			//SetCountText ();
 		}
 		if (other.gameObject.CompareTag ("YellowObject"))
 		{
@@ -535,7 +548,7 @@ class PlayerControllerTest : MonoBehaviour {
 			P1_Reticle_Yellow.enabled = true;
 			P2_Reticle_Yellow.enabled = true;
 
-			SetCountText ();
+			//SetCountText ();
 		}
 		if (other.gameObject.CompareTag ("OrangeObject"))
 		{
@@ -543,7 +556,7 @@ class PlayerControllerTest : MonoBehaviour {
 			P1_Reticle_Orange.enabled = true;
 			P2_Reticle_Orange.enabled = true;
 
-			SetCountText ();
+			//SetCountText ();
 		}
 		if (other.gameObject.CompareTag ("PurpleObject"))
 		{
@@ -551,11 +564,12 @@ class PlayerControllerTest : MonoBehaviour {
 			P1_Reticle_Purple.enabled = true;
 			P2_Reticle_Purple.enabled = true;
 
-			SetCountText ();
+			//SetCountText ();
 		}
 	}
 
 	//Function that updates HUD
+    /*
 	void SetCountText ()
 	{
 		countText.text = "Thruster Count: " + ThrustCount.ToString();
@@ -569,4 +583,5 @@ class PlayerControllerTest : MonoBehaviour {
             audio.PlayOneShot(endAudio);
 		}
 	}
+    */
 }
