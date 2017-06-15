@@ -267,7 +267,7 @@ class PlayerControllerTest : MonoBehaviour {
 				jointLimit.limit = Mathf.Infinity;
 				myJoint.linearLimit = jointLimit;
 				myLR_P1.enabled = false;
-				myRB.AddForce (0, 300.0f, 0);
+				myRB.AddRelativeForce (300.0f, 0, 0);
 
             }
 		}
@@ -372,7 +372,7 @@ class PlayerControllerTest : MonoBehaviour {
 				jointLimit.limit = Mathf.Infinity;
 				myJoint.linearLimit = jointLimit;
 				myLR_P2.enabled = false;
-				myRB.AddForce (0, 300.0f, 0);
+				myRB.AddRelativeForce (300.0f, 0, 0);
             }
         }
 			
@@ -382,62 +382,34 @@ class PlayerControllerTest : MonoBehaviour {
 		//Debug.Log (trigger_down);
 		//If both Players are holding button down
         /*
-		if (Input.GetAxisRaw ("Mining_P1") == 1 && Input.GetAxisRaw ("Mining_P2") == 1) 
+		if (Input.GetButtonDown("Mining_P1") || Input.GetButtonDown ("Mining_P2")) 
 		{
-			if (trigger_down == false) 
-			{
 				Ray ray_P1 = Camera.main.ScreenPointToRay (P1_Reticle_Inner.GetComponent<RectTransform> ().position);
 				Ray ray_P2 = Camera.main.ScreenPointToRay (P2_Reticle_Inner.GetComponent<RectTransform> ().position);
 
-				if (!grappleOn_Mining) 
-				{
+				
 					if ((Physics.Raycast (ray_P1, out Grapple_hit, maxGrappleDist)) && (Physics.Raycast (ray_P2, out Grapple_hit, maxGrappleDist))) {
 						int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
 						//Debug.Log (Grapple_hit.collider.gameObject.layer);
 						if (layerTrash == miningAsteroidMask.value) 
 						{
-							Debug.Log ("MINING");
-							MiningGrapple (Grapple_hit.point);
-							Grapple_hit.collider.gameObject.layer = 8;
-							MiningAsteroidCount++;
 							hit.transform.GetComponent<Renderer> ().material.color = Color.green;
-							SetCountText ();
+							//SetCountText ();
 						}
 					} else if ((Physics.SphereCast (ray_P1, hitRadius, out Grapple_hit, maxGrappleDist)) && (Physics.SphereCast (ray_P2, hitRadius, out Grapple_hit, maxGrappleDist))) {
 						int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
 						//Debug.Log (Grapple_hit.collider.gameObject.layer);
 						if (layerTrash == miningAsteroidMask.value) 
 						{
-							Debug.Log ("MINING");
-							MiningGrapple (Grapple_hit.point);
-							Grapple_hit.collider.gameObject.layer = 8;
-							MiningAsteroidCount++;
 							hit.transform.GetComponent<Renderer> ().material.color = Color.green;
-							SetCountText ();
+							//SetCountText ();
                         }
 					}
-				}
-
-				trigger_down = true;
-
-			}
-		} else 
-		{
-			if (trigger_down == true && grappleOn_Mining == true) 
-			{
-				grappleOn = false;
-				grappleOn_Mining = false;
-				jointLimit.limit = Mathf.Infinity;
-				myJoint.linearLimit = jointLimit;
-				myLR_Mining.enabled = false;
-				myRB.AddForce (0, 300.0f, 0);
-
-				trigger_down = false;
-			}
-		}
-*/
+				
+		}*/
 	
 	}
+
 
 	//Player 1 grappling function
 	void P1_ShootGrapple(Vector3 point) 
