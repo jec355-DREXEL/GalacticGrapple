@@ -267,7 +267,7 @@ class PlayerControllerTest : MonoBehaviour {
 				jointLimit.limit = Mathf.Infinity;
 				myJoint.linearLimit = jointLimit;
 				myLR_P1.enabled = false;
-				myRB.AddRelativeForce (300.0f, 0, 0);
+				myRB.AddForce (myTransform.forward * 300.0f);
 
             }
 		}
@@ -372,7 +372,7 @@ class PlayerControllerTest : MonoBehaviour {
 				jointLimit.limit = Mathf.Infinity;
 				myJoint.linearLimit = jointLimit;
 				myLR_P2.enabled = false;
-				myRB.AddRelativeForce (300.0f, 0, 0);
+				myRB.AddForce (myTransform.forward * 300.0f);
             }
         }
 			
@@ -384,16 +384,18 @@ class PlayerControllerTest : MonoBehaviour {
         /*
 		if (Input.GetButtonDown("Mining_P1") || Input.GetButtonDown ("Mining_P2")) 
 		{
-				Ray ray_P1 = Camera.main.ScreenPointToRay (P1_Reticle_Inner.GetComponent<RectTransform> ().position);
-				Ray ray_P2 = Camera.main.ScreenPointToRay (P2_Reticle_Inner.GetComponent<RectTransform> ().position);
+			Ray ray_P1 = Camera.main.ScreenPointToRay (P1_Reticle_Inner.GetComponent<RectTransform> ().position);
+			Ray ray_P2 = Camera.main.ScreenPointToRay (P2_Reticle_Inner.GetComponent<RectTransform> ().position);
 
 				
-					if ((Physics.Raycast (ray_P1, out Grapple_hit, maxGrappleDist)) && (Physics.Raycast (ray_P2, out Grapple_hit, maxGrappleDist))) {
-						int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
-						//Debug.Log (Grapple_hit.collider.gameObject.layer);
-						if (layerTrash == miningAsteroidMask.value) 
-						{
-							hit.transform.GetComponent<Renderer> ().material.color = Color.green;
+			if ((Physics.Raycast (ray_P1, out Grapple_hit, maxGrappleDist)) && (Physics.Raycast (ray_P2, out Grapple_hit, maxGrappleDist)))
+			{
+				int layerTrash = 1 << Grapple_hit.collider.gameObject.layer;
+				//Debug.Log (Grapple_hit.collider.gameObject.layer);
+				if (layerTrash == miningAsteroidMask.value) 
+				{
+							
+					hit.transform.GetComponent<Renderer> ().material.color = Color.green;
 							//SetCountText ();
 						}
 					} else if ((Physics.SphereCast (ray_P1, hitRadius, out Grapple_hit, maxGrappleDist)) && (Physics.SphereCast (ray_P2, hitRadius, out Grapple_hit, maxGrappleDist))) {
